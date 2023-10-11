@@ -1,0 +1,36 @@
+.btn-outline-gray {
+    width: 100%;
+    background-color: #fff;
+    border: 0.1rem solid #5d5d64;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    
+    span {
+        font-size: 1.6rem;
+        font-weight: 500;
+        color: #5d5d64;
+    }
+
+    &:hover {
+        border: 0.1rem solid var(--accent);
+        span {
+            color: var(--accent);
+        }
+    }
+}
+
+.btn-outline-gray.btn-icon {
+    svg {
+        path {
+            fill: #5d5d64;
+        }
+    }
+
+    &:hover {
+        svg {
+            path {
+                fill: var(--accent);
+            }
+        }
+    }
+}

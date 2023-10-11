@@ -1,0 +1,15 @@
+.btn {
+    width: max-content;
+    background-color: var(--accent);
+    border-radius: 0.5rem;
+    padding: 1rem 2rem;
+    span {
+        font-size: 1.6rem;
+        font-weight: 500;
+        color: #fff;
+    }
+
+    &:hover {
+        filter: brightness(105%);
+    }
+}

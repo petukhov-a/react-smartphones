@@ -1,0 +1,10 @@
+.smartphone-name {
+    display: inline-block;
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    transition: color 0.1s ease-in-out;
+
+    &:hover {
+        color: var(--accent);
+    }
+}
