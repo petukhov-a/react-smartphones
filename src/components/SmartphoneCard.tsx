@@ -1,47 +1,69 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import smartphoneImg from '../assets/img/smartphones/DOOGEE-V30.webp';
 
-const SmartphoneCard: FC = () => {
+type Smartphone = {
+  id: string;
+  name: string;
+  img: string;
+  rating: number;
+  price: number;
+  internalStorage: number;
+  screen: string;
+  screenSize: string;
+  screenResolution: string;
+  processor: string;
+  ram: number;
+  networkSupport: string;
+  fingerprintScanner: string;
+  dimensions: {
+    width: string,
+    height: string,
+    thickness: string
+  }
+}
+
+const SmartphoneCard: FC<Smartphone> = ( {id, name, img, rating, price, screen, screenSize, screenResolution, processor, ram, internalStorage, networkSupport, fingerprintScanner, dimensions} ) => {
+
   return (
     <>
       <div className="smartphone-card card-hover">
         <div className="smartphone-card-wrapper">
           <a href="./../pages/smartphonePage.html" className="smartphone-card__img">
-            <img src={smartphoneImg} alt="" />
+            <img src={img} alt="" />
           </a>
           <div className="smartphone-card-desq">
             <div className="smartphone-card-heading">
               <a href="./../pages/smartphonePage.html" className="smartphone-name">
-                Смартфон DOOGEE V30 8/256Gb, черный
+                {name}
               </a>
-              <p className="smartphone-id">Код товара: 1968430</p>
+              <p className="smartphone-id">Код товара: {id}</p>
             </div>
             <div className="separator"></div>
             <ul className="smartphone-card-specs">
               <li>
-                <span>Экран&nbsp;</span>IPS FHD+, 6.58" (2408x1080),
+                <span>Экран&nbsp;</span>{screen}, {screenSize}" ({screenResolution});
               </li>
               <li>
-                <span>Процессор&nbsp;</span>MediaTek Dimensity 900;
+                <span>Процессор&nbsp;</span>{processor};
               </li>
               <li>
-                <span>Память&nbsp;</span>оперативная 8 ГБ, встроенная 256 ГБ,
+                <span>Память&nbsp;</span>оперативная {ram} ГБ, встроенная {internalStorage} ГБ;
               </li>
               <li>
-                <span>Поддержка сетей&nbsp;</span>2G/3G/4G (LTE)/5G;
+                <span>Поддержка сетей&nbsp;</span>{networkSupport};
               </li>
               <li>
-                <span>Сканер отпечатка пальцев&nbsp;</span>сбоку;
+                <span>Сканер отпечатка пальцев&nbsp;</span>{fingerprintScanner};
               </li>
               <li>
-                <span>Размеры (ШхВхТ)&nbsp;</span>83.1 х 178.4 х 18.3 мм;
+                <span>Размеры (ШхВхТ)&nbsp;</span>{dimensions.width} х {dimensions.height} х {dimensions.thickness} мм;
               </li>
             </ul>
           </div>
           <div className="smartphone-card-add-cart">
             <div className="price">
               <p>
-                44 190 <span>₽</span>
+                {price} <span>₽</span>
               </p>
             </div>
             <button className="btn btn-icon">

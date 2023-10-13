@@ -1,4 +1,5 @@
-import React, { FC } from 'react'
+import React, { FC } from 'react';
+import dropDownArrow from '../assets/img/arrow.svg';
 
 const Sort: FC = () => {
   return (
@@ -15,7 +16,7 @@ const Sort: FC = () => {
       <div className="sort-list-mobile">
         <button className="sort-list-mobile-btn">
           <span>по популярности</span>
-          <img src="./../img/arrow.svg" alt="" />
+          <img src={dropDownArrow} alt="" />
         </button>
         <ul>
           <li>по популярности</li>

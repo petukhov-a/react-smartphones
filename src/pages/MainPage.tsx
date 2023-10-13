@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import Sort from "../components/Sort";
 
 import React from 'react'
@@ -6,6 +6,23 @@ import SmartphoneCard from "../components/SmartphoneCard";
 import Filter from "../components/Filter";
 
 const MainPage: FC = () => {
+  const [items, setItems] = useState([]);
+  const url = 'https://run.mocky.io/v3/b86238c8-87c1-45a3-9491-14d603534a34';
+
+  const fetchItems = (url: string) => {
+    fetch(url)
+    .then(res => res.json())
+    .then(res => {
+      setItems(res);
+    });
+  }
+
+  useEffect(() => {
+    fetchItems(url);
+  }, []);
+
+  const smartphones = items.map((item: any) => <SmartphoneCard {...item} key={item.id} />);
+
   return (
     <div className="smartphones">
       <div className="container">
@@ -19,10 +36,7 @@ const MainPage: FC = () => {
        <Sort />
         <div className="smartphones-content">
           <div className="smartphones-content-cards">
-            <SmartphoneCard />
-            <SmartphoneCard />
-            <SmartphoneCard />
-            <SmartphoneCard />
+            {smartphones}
           </div>
           <Filter />
         </div>
