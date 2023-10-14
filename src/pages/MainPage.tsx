@@ -7,7 +7,7 @@ import Filter from "../components/Filter";
 
 const MainPage: FC = () => {
   const [items, setItems] = useState([]);
-  const url = 'https://run.mocky.io/v3/b86238c8-87c1-45a3-9491-14d603534a34';
+  const url = 'https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=price';
 
   const fetchItems = (url: string) => {
     fetch(url)
