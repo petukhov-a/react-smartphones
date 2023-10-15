@@ -38,7 +38,7 @@ const FavoritesPage = () => {
             </button>
           </div>
           <div className="favorites-content-main">
-            <Sort />
+            {/* <Sort /> */}
             <div className="favorites-cards">
                 <FavoritesCard />
                 <FavoritesCard />
