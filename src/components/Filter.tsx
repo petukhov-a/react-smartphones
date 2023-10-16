@@ -14,7 +14,7 @@ const Filter = () => {
       <details className="smartphones-filter-item" open>
         <summary className="smartphones-filter-item__heading">
           <span>Цена</span>
-          <img className="drop-down-arrow" src={drodDownArrow} alt="" />
+          <img className="drop-down-arrow" src={drodDownArrow} alt="drop-down-arrow" />
         </summary>
         <div className="price-inputs">
           <input type="number" className="checkbox-input" value="2490" />
