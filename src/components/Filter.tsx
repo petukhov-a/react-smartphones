@@ -1,12 +1,43 @@
-import React from 'react';
+import React, { FC } from 'react';
 import FilterItem from './FilterItem';
 import drodDownArrow from '../assets/img/arrow.svg';
 
-const Filter = () => {
-  const internalStorageList = ['64', '128', '256'];
-  const ramList = ['2', '4', '6', '8', '10', '12'];
-  const brandList = ['DOOGEE', 'Apple', 'ITEL', 'Realme', 'Samsung', 'Xiaomi', 'TECNO'];
-  const screenTypeList = ['OLED', 'IPS', 'AMOLED'];
+type FilterProperty = 'internalStorage' | 'ram' | 'brand' | 'screenType';
+
+export type FilterListType = {
+  title: string;
+  propertyName: FilterProperty;
+  values: string[];
+  unit?: string;
+}
+
+const Filter: FC = () => {
+  
+  const internalStorageList: FilterListType = {
+    title: 'Встроенная память',
+    propertyName: 'internalStorage',
+    values: ['64', '128', '256'],
+    unit: 'ГБ',
+  };
+
+  const ramList: FilterListType = {
+    title: 'Оперативная память',
+    propertyName: 'ram',
+    values: ['2', '4', '6', '8', '10', '12'],
+    unit: 'ГБ',
+  };
+
+  const brandList: FilterListType = {
+    title: 'Бренд',
+    propertyName: 'brand',
+    values: ['DOOGEE', 'Apple', 'ITEL', 'Realme', 'Samsung', 'Xiaomi', 'TECNO']
+  };
+
+  const screenTypeList: FilterListType = {
+    title: 'Тип экрана',
+    propertyName: 'screenType',
+    values: ['OLED', 'IPS', 'AMOLED']
+  };
 
   return (
     <div className="smartphones-filter">
@@ -22,10 +53,10 @@ const Filter = () => {
           <input type="number" className="checkbox-input" value="199990" />
         </div>
       </details>
-      <FilterItem name='Встроенная память' valueList={internalStorageList} unit='ГБ' />
-      <FilterItem name='Оперативная память' valueList={ramList} unit='ГБ'/>
-      <FilterItem name='Бренд' valueList={brandList}/>
-      <FilterItem name='Тип экрана' valueList={screenTypeList}/>
+      <FilterItem {...internalStorageList} />
+      <FilterItem {...ramList} />
+      <FilterItem {...brandList} />
+      <FilterItem {...screenTypeList} />
     </div>
   );
 }

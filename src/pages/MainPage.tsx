@@ -4,6 +4,8 @@ import Sort, { sortList } from "../components/Sort";
 import React from 'react'
 import SmartphoneCard from "../components/SmartphoneCard";
 import Filter from "../components/Filter";
+import { selectFilter } from "../redux/filter/selectors";
+import { useSelector } from "react-redux";
 
 const MainPage: FC = () => {
   const [items, setItems] = useState([]);
@@ -12,7 +14,13 @@ const MainPage: FC = () => {
   const order = isAsc ? 'asc' : 'desc';
   const sortTypeName = sortList[sortType].sortProperty;
 
-  const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}`;
+  const { internalStorage, ram, brand, screenType } = useSelector(selectFilter);
+
+  const storageFilter = internalStorage ? `&internalStorage=${internalStorage}` : '';
+  const ramFilter = ram ? `&ram=${ram}` : '';
+  const brandFilter = brand ? `&brand=${brand}` : '';
+
+  const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}${storageFilter}${ramFilter}${brandFilter}`;
 
   const fetchItems = (url: string) => {
     fetch(url)
@@ -24,7 +32,8 @@ const MainPage: FC = () => {
 
   useEffect(() => {
     fetchItems(url);
-  }, [isAsc, sortType]);
+    console.log(url);
+  }, [order, sortTypeName, internalStorage, ram, brand]);
 
   const onChangeSort = (index: number) => {
     if (sortType !== index) {
