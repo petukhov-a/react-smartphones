@@ -1,12 +1,11 @@
 import React, { FC } from 'react';
 import FilterItem from './FilterItem';
 import drodDownArrow from '../assets/img/arrow.svg';
-
-type FilterProperty = 'internalStorage' | 'ram' | 'brand' | 'screenType';
+import { FilterName } from '../redux/filter/types';
 
 export type FilterListType = {
   title: string;
-  propertyName: FilterProperty;
+  propertyName: FilterName;
   values: string[];
   unit?: string;
 }

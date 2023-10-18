@@ -1,39 +1,47 @@
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import Sort, { sortList } from "../components/Sort";
 
 import React from 'react'
 import SmartphoneCard from "../components/SmartphoneCard";
 import Filter from "../components/Filter";
+import { FilterName } from "../redux/filter/types";
 import { selectFilter } from "../redux/filter/selectors";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { selectSmartphones } from "../redux/smartphones/selectors";
+import { setSmartphones } from "../redux/smartphones/slice";
+import { Smartphone } from "../redux/smartphones/types";
+import { FilterSliceState } from "../redux/filter/types";
 
 const MainPage: FC = () => {
-  const [items, setItems] = useState([]);
+
   const [sortType, setSortType] = useState(0);
   const [isAsc, setIsAsc] = useState(false);
   const order = isAsc ? 'asc' : 'desc';
+  const [filteredItems, setFilteredItems] = useState<Smartphone[]>([]);
   const sortTypeName = sortList[sortType].sortProperty;
+  const dispatch = useDispatch();
 
-  const { internalStorage, ram, brand, screenType } = useSelector(selectFilter);
+  const filterValues: FilterSliceState = { ...useSelector(selectFilter) };
+  const { items } = useSelector(selectSmartphones);
 
-  const storageFilter = internalStorage ? `&internalStorage=${internalStorage}` : '';
-  const ramFilter = ram ? `&ram=${ram}` : '';
-  const brandFilter = brand ? `&brand=${brand}` : '';
+  const storageFilter = filterValues.internalStorage ? `&internalStorage=${filterValues.internalStorage}` : '';
+  const ramFilter = filterValues.ram ? `&ram=${filterValues.ram}` : '';
+  const brandFilter = filterValues.brand ? `&brand=${filterValues.brand}` : '';
 
   const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}${storageFilter}${ramFilter}${brandFilter}`;
+  // const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}`;
 
   const fetchItems = (url: string) => {
     fetch(url)
-    .then(res => res.json())
-    .then(res => {
-      setItems(res);
-    });
+      .then(res => res.json())
+      .then(res => {
+        dispatch(setSmartphones(res));
+      })
   }
 
   useEffect(() => {
     fetchItems(url);
-    console.log(url);
-  }, [order, sortTypeName, internalStorage, ram, brand]);
+  }, [order, sortTypeName, filterValues.internalStorage, filterValues.ram, filterValues.brand]);
 
   const onChangeSort = (index: number) => {
     if (sortType !== index) {
@@ -44,7 +52,11 @@ const MainPage: FC = () => {
     setSortType(index);
   }
 
-  const smartphones = items.map((item: any) => <SmartphoneCard {...item} key={item.id} />);
+  useEffect(() => {
+
+  }, [filterValues.internalStorage, filterValues.ram, items])
+
+  const smartphones = items.map((item: Smartphone) => <SmartphoneCard {...item} key={item.id} />);
 
   return (
     <div className="smartphones">

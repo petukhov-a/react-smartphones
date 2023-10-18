@@ -21,7 +21,8 @@ const Sort: FC<SortProps> = ({onChangeSort, isAsc, sortType}) => {
   const sortItemsElements = sortList.map((item, index) => (
     <li
       onClick={() => onChangeSort(index)}
-      className={sortType === index ? 'active' : ''}>
+      className={sortType === index ? 'active' : ''}
+      key={index}>
         {item.name}
       <img
         className={"sort-order-img" + clazz}

@@ -1,28 +1,8 @@
 import React, { FC, useEffect } from 'react';
 import smartphoneImg from '../assets/img/smartphones/DOOGEE-V30.webp';
+import { Smartphone } from '../redux/smartphones/types';
 
-type Smartphone = {
-  id: string;
-  name: string;
-  img: string;
-  rating: number;
-  price: number;
-  internalStorage: number;
-  screen: string;
-  screenSize: string;
-  screenResolution: string;
-  processor: string;
-  ram: number;
-  networkSupport: string;
-  fingerprintScanner: string;
-  dimensions: {
-    width: string,
-    height: string,
-    thickness: string
-  }
-}
-
-const SmartphoneCard: FC<Smartphone> = ( {id, name, img, rating, price, screen, screenSize, screenResolution, processor, ram, internalStorage, networkSupport, fingerprintScanner, dimensions} ) => {
+const SmartphoneCard: FC<Smartphone> = ( {id, name, img, rating, price, screenType, screenSize, screenResolution, processor, ram, internalStorage, networkSupport, fingerprintScanner, dimensions} ) => {
 
   return (
     <>
@@ -41,7 +21,7 @@ const SmartphoneCard: FC<Smartphone> = ( {id, name, img, rating, price, screen, 
             <div className="separator"></div>
             <ul className="smartphone-card-specs">
               <li>
-                <span>Экран&nbsp;</span>{screen}, {screenSize}" ({screenResolution});
+                <span>Экран&nbsp;</span>{screenType}, {screenSize}" ({screenResolution});
               </li>
               <li>
                 <span>Процессор&nbsp;</span>{processor};

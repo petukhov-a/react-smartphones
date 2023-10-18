@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import filter from './filter/slice';
+import smartphones from './smartphones/slice'
 
 export const store = configureStore({
   reducer: {
     filter,
+    smartphones,
   },
 });
 
