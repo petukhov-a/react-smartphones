@@ -1,8 +1,8 @@
 export interface FilterSliceState {
-    internalStorage: string;
-    ram: string;
-    brand: string;
-    screenType: string;
+    internalStorage: string[];
+    ram: string[];
+    brand: string[];
+    screenType: string[];
     searchValue: string;
   }
 

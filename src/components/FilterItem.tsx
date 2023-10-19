@@ -1,22 +1,25 @@
 import { FC, useEffect, useState } from 'react';
 import drodDownArrow from '../assets/img/arrow.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFilterValue } from '../redux/filter/slice';
+import { removeFilterValue, setFilterValue } from '../redux/filter/slice';
 import { FilterListType } from './Filter';
 
 const FilterItem: FC<FilterListType> = ({ title, values, unit, propertyName }) => {
-  const [checkedIndex, setCheckedIndex] = useState(-1);
+  const [checkedIndexes, setCheckedIndexes] = useState<number[]>([]);
   const dispatch = useDispatch();
 
   const onInputClick = (index: number) => {
+    const filterValue = values[index];
+    let newIndexes = checkedIndexes;
 
-    if (index === checkedIndex) {
-      dispatch(setFilterValue({ propertyName, filterValue: '' }));
-      setCheckedIndex(-1);
+    if (checkedIndexes.includes(index)) {
+      dispatch(removeFilterValue({ propertyName, filterValue }));
+      newIndexes = newIndexes.filter(item => item !== index);
+      setCheckedIndexes(newIndexes);
     } else {
-      const filterValue = values[index];
       dispatch(setFilterValue({ propertyName, filterValue }));
-      setCheckedIndex(index);
+      newIndexes.push(index);
+      setCheckedIndexes(newIndexes);
     }
   };
 
@@ -33,7 +36,7 @@ const FilterItem: FC<FilterListType> = ({ title, values, unit, propertyName }) =
               <input
                 name={title}
                 type="checkbox"
-                checked={index === checkedIndex}
+                // checked={index === checkedIndex}
                 onClick={() => onInputClick(index)}
               />
               {unit ? item + ' ' + unit : item}

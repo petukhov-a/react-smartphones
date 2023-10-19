@@ -29,8 +29,8 @@ const MainPage: FC = () => {
   const brandFilter = filterValues.brand ? `&brand=${filterValues.brand}` : '';
   const search = filterValues.searchValue ? `&name=${filterValues.searchValue}` : '';
 
-  const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}${search}${storageFilter}${ramFilter}${brandFilter}`;
-  // const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}`;
+  // const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}${search}${storageFilter}${ramFilter}${brandFilter}`;
+  const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}`;
 
   const fetchItems = (url: string) => {
     fetch(url)
@@ -53,11 +53,41 @@ const MainPage: FC = () => {
     setSortType(index);
   }
 
+  const isFilterValuesExist = () => {
+    for (let key in filterValues) {
+      const filterKey = key as FilterName;
+      if (filterValues[filterKey].length !== 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  const isMatchFilters = (item: Smartphone) => {
+    for (let key in filterValues) {
+      const filterKey = key as FilterName;
+      if (filterValues[filterKey].length !== 0) {
+        const isMatchFilter = filterValues[filterKey].includes(String(item[filterKey]));
+        if (!isMatchFilter) {
+          return false;
+         }
+      }
+    }
+    return true;
+  }
+
   useEffect(() => {
+    const newItems = items.filter(item => isMatchFilters(item));
 
-  }, [filterValues.internalStorage, filterValues.ram, items])
+    if (!isFilterValuesExist()) {
+      setFilteredItems(items)
+    } else {
+      setFilteredItems(newItems);
+    }
 
-  const smartphones = items.map((item: Smartphone) => <SmartphoneCard {...item} key={item.id} />);
+  }, [filterValues.internalStorage, filterValues.ram, filterValues.brand, filterValues.screenType, items])
+
+  const smartphones = filteredItems.map((item: Smartphone) => <SmartphoneCard {...item} key={item.id} />);
 
   return (
     <div className="smartphones">

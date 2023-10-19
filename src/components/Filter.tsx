@@ -29,7 +29,7 @@ const Filter: FC = () => {
   const brandList: FilterListType = {
     title: 'Бренд',
     propertyName: 'brand',
-    values: ['DOOGEE', 'Apple', 'ITEL', 'Realme', 'Samsung', 'Xiaomi', 'TECNO']
+    values: ['DOOGEE', 'Apple', 'ITEL', 'REALME', 'Samsung', 'Xiaomi', 'TECNO']
   };
 
   const screenTypeList: FilterListType = {
