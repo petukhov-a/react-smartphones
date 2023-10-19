@@ -29,7 +29,7 @@ const MainPage: FC = () => {
   const brandFilter = filterValues.brand ? `&brand=${filterValues.brand}` : '';
   const search = filterValues.searchValue ? `&name=${filterValues.searchValue}` : '';
 
-  const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}`;
+  const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}${search}`;
 
   const fetchItems = (url: string) => {
     fetch(url)
@@ -52,8 +52,10 @@ const MainPage: FC = () => {
     setSortType(index);
   }
 
-  const isFilterValueExist = (filterName: FilterName) => {
-    return filterValues[filterName].length !== 0;
+  const isFilterValueExist = (filterName: FilterName | 'searchValue') => {
+    if (filterName !== 'searchValue' && filterValues[filterName].length !== 0) {
+      return true;
+    }
   }
 
   const isFilterValuesExist = () => {
