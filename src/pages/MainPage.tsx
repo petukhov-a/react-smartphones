@@ -29,7 +29,6 @@ const MainPage: FC = () => {
   const brandFilter = filterValues.brand ? `&brand=${filterValues.brand}` : '';
   const search = filterValues.searchValue ? `&name=${filterValues.searchValue}` : '';
 
-  // const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}${search}${storageFilter}${ramFilter}${brandFilter}`;
   const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}`;
 
   const fetchItems = (url: string) => {
@@ -53,10 +52,14 @@ const MainPage: FC = () => {
     setSortType(index);
   }
 
+  const isFilterValueExist = (filterName: FilterName) => {
+    return filterValues[filterName].length !== 0;
+  }
+
   const isFilterValuesExist = () => {
     for (let key in filterValues) {
       const filterKey = key as FilterName;
-      if (filterValues[filterKey].length !== 0) {
+      if (isFilterValueExist(filterKey)) {
         return true;
       }
     }
@@ -66,8 +69,9 @@ const MainPage: FC = () => {
   const isMatchFilters = (item: Smartphone) => {
     for (let key in filterValues) {
       const filterKey = key as FilterName;
-      if (filterValues[filterKey].length !== 0) {
-        const isMatchFilter = filterValues[filterKey].includes(String(item[filterKey]));
+      if (isFilterValueExist(filterKey)) {
+        const matchingItem = String(item[filterKey]);
+        const isMatchFilter = filterValues[filterKey].includes(matchingItem);
         if (!isMatchFilter) {
           return false;
          }

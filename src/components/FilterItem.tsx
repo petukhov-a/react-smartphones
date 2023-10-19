@@ -10,16 +10,16 @@ const FilterItem: FC<FilterListType> = ({ title, values, unit, propertyName }) =
 
   const onInputClick = (index: number) => {
     const filterValue = values[index];
-    let newIndexes = checkedIndexes;
+    let newCheckedIndexes = checkedIndexes;
 
     if (checkedIndexes.includes(index)) {
       dispatch(removeFilterValue({ propertyName, filterValue }));
-      newIndexes = newIndexes.filter(item => item !== index);
-      setCheckedIndexes(newIndexes);
+      newCheckedIndexes = newCheckedIndexes.filter(item => item !== index);
+      setCheckedIndexes(newCheckedIndexes);
     } else {
       dispatch(setFilterValue({ propertyName, filterValue }));
-      newIndexes.push(index);
-      setCheckedIndexes(newIndexes);
+      newCheckedIndexes.push(index);
+      setCheckedIndexes(newCheckedIndexes);
     }
   };
 
@@ -36,7 +36,6 @@ const FilterItem: FC<FilterListType> = ({ title, values, unit, propertyName }) =
               <input
                 name={title}
                 type="checkbox"
-                // checked={index === checkedIndex}
                 onClick={() => onInputClick(index)}
               />
               {unit ? item + ' ' + unit : item}

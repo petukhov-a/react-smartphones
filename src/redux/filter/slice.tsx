@@ -16,11 +16,15 @@ export const filterSlice = createSlice({
   reducers: {
     setFilterValue(state, action: PayloadAction<FilterSetType>) {
       const filterName = action.payload.propertyName;
-      state[filterName].push(action.payload.filterValue);
+      const filterValue = action.payload.filterValue;
+
+      state[filterName].push(filterValue);
     },
     removeFilterValue(state, action: PayloadAction<FilterSetType>) {
       const filterName = action.payload.propertyName;
-      const newValues = state[filterName].filter(value => value !== action.payload.filterValue);
+      const filterValue = action.payload.filterValue;
+      const newValues = state[filterName].filter(value => value !== filterValue);
+      
       state[filterName] = newValues;
     },
     setSearchValue(state, action: PayloadAction<string>) {
