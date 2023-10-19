@@ -3,6 +3,7 @@ export interface FilterSliceState {
     ram: string;
     brand: string;
     screenType: string;
+    searchValue: string;
   }
 
 export interface FilterSetType {

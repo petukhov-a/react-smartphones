@@ -27,8 +27,9 @@ const MainPage: FC = () => {
   const storageFilter = filterValues.internalStorage ? `&internalStorage=${filterValues.internalStorage}` : '';
   const ramFilter = filterValues.ram ? `&ram=${filterValues.ram}` : '';
   const brandFilter = filterValues.brand ? `&brand=${filterValues.brand}` : '';
+  const search = filterValues.searchValue ? `&name=${filterValues.searchValue}` : '';
 
-  const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}${storageFilter}${ramFilter}${brandFilter}`;
+  const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}${search}${storageFilter}${ramFilter}${brandFilter}`;
   // const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}`;
 
   const fetchItems = (url: string) => {
@@ -41,7 +42,7 @@ const MainPage: FC = () => {
 
   useEffect(() => {
     fetchItems(url);
-  }, [order, sortTypeName, filterValues.internalStorage, filterValues.ram, filterValues.brand]);
+  }, [order, sortTypeName, filterValues.internalStorage, filterValues.ram, filterValues.brand, filterValues.searchValue]);
 
   const onChangeSort = (index: number) => {
     if (sortType !== index) {

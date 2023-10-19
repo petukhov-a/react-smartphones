@@ -23,6 +23,15 @@
         top: -0.5rem;
         right: 0;
     }
+
+    &__clear-icon {
+        width: 2rem;
+        height: 2rem;
+        position: absolute;
+        top: -0.5rem;
+        right: 2.5rem;
+        cursor: pointer;
+    }
 }
 
 @media(max-width: 768px) {

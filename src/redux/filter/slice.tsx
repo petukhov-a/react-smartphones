@@ -7,6 +7,7 @@ const initialState: FilterSliceState = {
   ram: '',
   brand: '',
   screenType: '',
+  searchValue: '',
 }
 
 export const filterSlice = createSlice({
@@ -17,10 +18,13 @@ export const filterSlice = createSlice({
       const filterName = action.payload.propertyName;
       state[filterName] = action.payload.filterValue;
     },
+    setSearchValue(state, action: PayloadAction<string>) {
+      state.searchValue = action.payload;
+    }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setFilterValue  } = filterSlice.actions
+export const { setFilterValue, setSearchValue  } = filterSlice.actions
 
 export default filterSlice.reducer
