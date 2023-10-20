@@ -58,32 +58,37 @@ const MainPage: FC = () => {
   }
 
   const isFilterValueExist = (filterName: FilterName | 'searchValue' | 'prices') => {
-    if (filterName !== 'searchValue' && filterName !== 'prices' && filterValues[filterName].length !== 0) {
+    if (filterName !== 'searchValue' &&
+        filterValues[filterName].length !== 0 &&
+        filterName !== 'prices') {
       return true;
     }
   }
 
-  const isFilterValuesExist = () => {
-    for (let key in filterValues) {
-      const filterKey = key as FilterName;
-      if (isFilterValueExist(filterKey)) {
-        return true;
-      }
+  const isMatchFilters = (item: Smartphone) => {
+    if (!isMatchCheckboxFilters(item)) {
+      return false;
     }
-    return false;
+
+    if (!isMatchPriceFilter(item)) {
+      return false;
+    }
+
+    return true;
   }
 
-  const isMatchFilters = (item: Smartphone) => {
+  const isMatchCheckboxFilters = (item: Smartphone) => {
     for (let key in filterValues) {
       const filterKey = key as FilterName;
       if (isFilterValueExist(filterKey)) {
-        const matchingItem = String(item[filterKey]);
-        const isMatchFilter = filterValues[filterKey].includes(matchingItem);
+        const matchingValue = String(item[filterKey]);
+        const isMatchFilter = filterValues[filterKey].includes(matchingValue);
         if (!isMatchFilter) {
           return false;
          }
       }
     }
+    
     return true;
   }
 
@@ -96,16 +101,9 @@ const MainPage: FC = () => {
   }
 
   useEffect(() => {
-    const newItems = items.filter(item => {
-      if (!isFilterValuesExist) {
-        return isMatchPriceFilter(item);
-      }
-
-      return isMatchFilters(item) && isMatchPriceFilter(item);
-    });
+    const newItems = items.filter(item => isMatchFilters(item));
 
     setFilteredItems(newItems);
-
   }, [items]);
 
   const smartphones = filteredItems.map((item: Smartphone) => <SmartphoneCard {...item} key={item.id} />);

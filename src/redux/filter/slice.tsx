@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { FilterPrices, FilterSetType, FilterSliceState } from './types';
 
 const initialState: FilterSliceState = {
-  prices: [10000, 200000],
+  prices: [1, 200000],
   internalStorage: [],
   ram: [],
   brand: [],
