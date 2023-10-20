@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import FilterItem from './FilterItem';
-import drodDownArrow from '../assets/img/arrow.svg';
 import { FilterName } from '../redux/filter/types';
+import FilterPrice from './FilterPrice';
 
 export type FilterListType = {
   title: string;
@@ -41,17 +41,7 @@ const Filter: FC = () => {
   return (
     <div className="smartphones-filter">
       <h1 className="smartphones-filter__heading">Фильтры</h1>
-      <details className="smartphones-filter-item" open>
-        <summary className="smartphones-filter-item__heading">
-          <span>Цена</span>
-          <img className="drop-down-arrow" src={drodDownArrow} alt="drop-down-arrow" />
-        </summary>
-        <div className="price-inputs">
-          <input type="number" className="checkbox-input" value="2490" />
-          <span>–</span>
-          <input type="number" className="checkbox-input" value="199990" />
-        </div>
-      </details>
+      <FilterPrice />
       <FilterItem {...internalStorageList} />
       <FilterItem {...ramList} />
       <FilterItem {...brandList} />

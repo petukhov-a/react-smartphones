@@ -7,6 +7,7 @@ export type Smartphone = {
     name: string,
     brand: string,
     screenType: string,
+    screenTypeFull: string,
     screenSize: number,
     screenResolution: string,
     processor: string,

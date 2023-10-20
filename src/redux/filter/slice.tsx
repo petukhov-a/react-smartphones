@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { FilterSetType, FilterSliceState } from './types';
+import { FilterPrices, FilterSetType, FilterSliceState } from './types';
 
 const initialState: FilterSliceState = {
+  prices: [10000, 200000],
   internalStorage: [],
   ram: [],
   brand: [],
@@ -29,11 +30,14 @@ export const filterSlice = createSlice({
     },
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload;
+    },
+    setPriceFilterValue(state, action: PayloadAction<FilterPrices>) {
+      state.prices = action.payload;
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setFilterValue, setSearchValue, removeFilterValue  } = filterSlice.actions
+export const { setFilterValue, setSearchValue, removeFilterValue, setPriceFilterValue  } = filterSlice.actions
 
 export default filterSlice.reducer

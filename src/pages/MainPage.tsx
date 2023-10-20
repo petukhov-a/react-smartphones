@@ -11,6 +11,7 @@ import { selectSmartphones } from "../redux/smartphones/selectors";
 import { setSmartphones } from "../redux/smartphones/slice";
 import { Smartphone } from "../redux/smartphones/types";
 import { FilterSliceState } from "../redux/filter/types";
+import { setPriceFilterValue } from "../redux/filter/slice";
 
 const MainPage: FC = () => {
 
@@ -24,9 +25,6 @@ const MainPage: FC = () => {
   const filterValues: FilterSliceState = { ...useSelector(selectFilter) };
   const { items } = useSelector(selectSmartphones);
 
-  const storageFilter = filterValues.internalStorage ? `&internalStorage=${filterValues.internalStorage}` : '';
-  const ramFilter = filterValues.ram ? `&ram=${filterValues.ram}` : '';
-  const brandFilter = filterValues.brand ? `&brand=${filterValues.brand}` : '';
   const search = filterValues.searchValue ? `&name=${filterValues.searchValue}` : '';
 
   const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}${search}`;
@@ -36,12 +34,19 @@ const MainPage: FC = () => {
       .then(res => res.json())
       .then(res => {
         dispatch(setSmartphones(res));
-      })
+      });
+  }
+
+  const setMinMaxPrice = (items: Smartphone[]) => {
+    const minPrice = Math.min(...items.map(item => item.price));
+    const maxPrice = Math.max(...items.map(item => item.price));
+
+    dispatch(setPriceFilterValue([minPrice, maxPrice]));
   }
 
   useEffect(() => {
     fetchItems(url);
-  }, [order, sortTypeName, filterValues.internalStorage, filterValues.ram, filterValues.brand, filterValues.searchValue]);
+  }, [order, sortTypeName, filterValues.internalStorage, filterValues.ram, filterValues.brand, filterValues.searchValue, filterValues.screenType, filterValues.prices]);
 
   const onChangeSort = (index: number) => {
     if (sortType !== index) {
@@ -52,8 +57,8 @@ const MainPage: FC = () => {
     setSortType(index);
   }
 
-  const isFilterValueExist = (filterName: FilterName | 'searchValue') => {
-    if (filterName !== 'searchValue' && filterValues[filterName].length !== 0) {
+  const isFilterValueExist = (filterName: FilterName | 'searchValue' | 'prices') => {
+    if (filterName !== 'searchValue' && filterName !== 'prices' && filterValues[filterName].length !== 0) {
       return true;
     }
   }
@@ -82,16 +87,26 @@ const MainPage: FC = () => {
     return true;
   }
 
-  useEffect(() => {
-    const newItems = items.filter(item => isMatchFilters(item));
-
-    if (!isFilterValuesExist()) {
-      setFilteredItems(items)
-    } else {
-      setFilteredItems(newItems);
+  const isMatchPriceFilter = (item: Smartphone) => {
+    if (item.price >= filterValues.prices[0] &&
+        item.price <= filterValues.prices[1]) {
+          return true;
     }
+    return false;
+  }
 
-  }, [filterValues.internalStorage, filterValues.ram, filterValues.brand, filterValues.screenType, items])
+  useEffect(() => {
+    const newItems = items.filter(item => {
+      if (!isFilterValuesExist) {
+        return isMatchPriceFilter(item);
+      }
+
+      return isMatchFilters(item) && isMatchPriceFilter(item);
+    });
+
+    setFilteredItems(newItems);
+
+  }, [items]);
 
   const smartphones = filteredItems.map((item: Smartphone) => <SmartphoneCard {...item} key={item.id} />);
 

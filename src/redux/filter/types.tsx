@@ -1,10 +1,11 @@
 export interface FilterSliceState {
-    internalStorage: string[];
-    ram: string[];
-    brand: string[];
-    screenType: string[];
-    searchValue: string;
-  }
+  prices: FilterPrices;
+  internalStorage: string[];
+  ram: string[];
+  brand: string[];
+  screenType: string[];
+  searchValue: string;
+}
 
 export interface FilterSetType {
   propertyName: FilterName;
@@ -12,3 +13,5 @@ export interface FilterSetType {
 }
 
 export type FilterName = 'internalStorage' | 'ram' | 'brand' | 'screenType';
+
+export type FilterPrices = [number, number];
