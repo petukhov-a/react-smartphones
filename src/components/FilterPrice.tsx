@@ -14,7 +14,7 @@ const FilterPrice = () => {
 
   useEffect(() => {
     setSmartphonePrices([prices[0], prices[1]]);
-  }, []);
+  }, [prices]);
 
   const updatePriceValue = useCallback(
     debounce((newPrices: FilterPrices) => {

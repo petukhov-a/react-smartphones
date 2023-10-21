@@ -1,7 +1,5 @@
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useReducer, useRef, useState } from "react";
 import Sort, { sortList } from "../components/Sort";
-
-import React from 'react'
 import SmartphoneCard from "../components/SmartphoneCard";
 import Filter from "../components/Filter";
 import { FilterName } from "../redux/filter/types";
@@ -20,12 +18,14 @@ const MainPage: FC = () => {
   const order = isAsc ? 'asc' : 'desc';
   const [filteredItems, setFilteredItems] = useState<Smartphone[]>([]);
   const sortTypeName = sortList[sortType].sortProperty;
+  const isFilterPriceSetted = useRef(false);
   const dispatch = useDispatch();
 
   const filterValues: FilterSliceState = { ...useSelector(selectFilter) };
   const { items } = useSelector(selectSmartphones);
 
   const search = filterValues.searchValue ? `&name=${filterValues.searchValue}` : '';
+
 
   const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}${search}`;
 
@@ -88,7 +88,7 @@ const MainPage: FC = () => {
          }
       }
     }
-    
+
     return true;
   }
 
@@ -104,6 +104,12 @@ const MainPage: FC = () => {
     const newItems = items.filter(item => isMatchFilters(item));
 
     setFilteredItems(newItems);
+
+    if (!isFilterPriceSetted.current && items.length !== 0) {
+      setMinMaxPrice(items);
+      isFilterPriceSetted.current = true;
+    }
+
   }, [items]);
 
   const smartphones = filteredItems.map((item: Smartphone) => <SmartphoneCard {...item} key={item.id} />);
