@@ -5,6 +5,17 @@
     height: min-content;
     background-color: #f5f5f6;
 
+    &-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    &__clear-btn {
+        font-size: 1.4rem;
+        color: var(--accent);
+    }
+
     &__heading {
         font-size: 2.8rem;
         font-weight: 700;

@@ -1,7 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import FilterItem from './FilterItem';
 import { FilterName } from '../redux/filter/types';
 import FilterPrice from './FilterPrice';
+import { clearFilters } from '../redux/filter/slice';
+import { useDispatch } from 'react-redux';
 
 export type FilterListType = {
   title: string;
@@ -11,6 +13,9 @@ export type FilterListType = {
 }
 
 const Filter: FC = () => {
+
+  const dispatch = useDispatch();
+  const [checked, setChecked] = useState(null);
   
   const internalStorageList: FilterListType = {
     title: 'Встроенная память',
@@ -38,9 +43,16 @@ const Filter: FC = () => {
     values: ['OLED', 'IPS', 'AMOLED']
   };
 
+  const onClickClear = () => {
+    dispatch(clearFilters());
+  }
+
   return (
     <div className="smartphones-filter">
-      <h1 className="smartphones-filter__heading">Фильтры</h1>
+      <div className="smartphones-filter-header">
+        <h1 className="smartphones-filter__heading">Фильтры</h1>
+        <button className="smartphones-filter__clear-btn" onClick={onClickClear}>Очистить</button>
+      </div>
       <FilterPrice />
       <FilterItem {...internalStorageList} />
       <FilterItem {...ramList} />

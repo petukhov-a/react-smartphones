@@ -10,6 +10,7 @@ import { setSmartphones } from "../redux/smartphones/slice";
 import { Smartphone } from "../redux/smartphones/types";
 import { FilterSliceState } from "../redux/filter/types";
 import { setPriceFilterValue } from "../redux/filter/slice";
+import isEqual from 'lodash.isequal';
 
 const MainPage: FC = () => {
 
@@ -18,14 +19,13 @@ const MainPage: FC = () => {
   const order = isAsc ? 'asc' : 'desc';
   const [filteredItems, setFilteredItems] = useState<Smartphone[]>([]);
   const sortTypeName = sortList[sortType].sortProperty;
-  const isFilterPriceSetted = useRef(false);
   const dispatch = useDispatch();
 
   const filterValues: FilterSliceState = { ...useSelector(selectFilter) };
   const { items } = useSelector(selectSmartphones);
+  const prevFiltersRef = useRef<FilterSliceState>();
 
   const search = filterValues.searchValue ? `&name=${filterValues.searchValue}` : '';
-
 
   const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}${search}`;
 
@@ -41,12 +41,20 @@ const MainPage: FC = () => {
     const minPrice = Math.min(...items.map(item => item.price));
     const maxPrice = Math.max(...items.map(item => item.price));
 
-    dispatch(setPriceFilterValue([minPrice, maxPrice]));
+    if (isFinite(minPrice) && isFinite(maxPrice)) {
+      dispatch(setPriceFilterValue([minPrice, maxPrice]));
+    }
   }
 
   useEffect(() => {
+    if (!isEqual(filterValues, prevFiltersRef.current)) {
+      fetchItems(url);
+    }
+  }, [filterValues]);
+
+  useEffect(() => {
     fetchItems(url);
-  }, [order, sortTypeName, filterValues.internalStorage, filterValues.ram, filterValues.brand, filterValues.searchValue, filterValues.screenType, filterValues.prices]);
+  }, [order, sortTypeName]);
 
   const onChangeSort = (index: number) => {
     if (sortType !== index) {
@@ -105,11 +113,11 @@ const MainPage: FC = () => {
 
     setFilteredItems(newItems);
 
-    if (!isFilterPriceSetted.current && items.length !== 0) {
+    if (filterValues.prices.toString() === `0,0`) {
       setMinMaxPrice(items);
-      isFilterPriceSetted.current = true;
     }
 
+    prevFiltersRef.current = filterValues;
   }, [items]);
 
   const smartphones = filteredItems.map((item: Smartphone) => <SmartphoneCard {...item} key={item.id} />);
