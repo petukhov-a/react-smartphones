@@ -1,9 +1,10 @@
-import React, { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import FilterItem from './FilterItem';
 import { FilterName } from '../redux/filter/types';
 import FilterPrice from './FilterPrice';
 import { clearFilters } from '../redux/filter/slice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectFilter } from '../redux/filter/selectors';
 
 export type FilterListType = {
   title: string;
@@ -15,37 +16,44 @@ export type FilterListType = {
 const Filter: FC = () => {
 
   const dispatch = useDispatch();
-  const [checked, setChecked] = useState(null);
-  
-  const internalStorageList: FilterListType = {
-    title: 'Встроенная память',
-    propertyName: 'internalStorage',
-    values: ['64', '128', '256'],
-    unit: 'ГБ',
-  };
+  const [isCleared, setIsCleared] = useState<boolean>(false);
+  const filterValues = useSelector(selectFilter);
 
-  const ramList: FilterListType = {
-    title: 'Оперативная память',
-    propertyName: 'ram',
-    values: ['2', '4', '6', '8', '10', '12'],
-    unit: 'ГБ',
-  };
+  useEffect(() => {
+    setIsCleared(false);
+  }, [filterValues]);
 
-  const brandList: FilterListType = {
-    title: 'Бренд',
-    propertyName: 'brand',
-    values: ['DOOGEE', 'Apple', 'ITEL', 'REALME', 'Samsung', 'Xiaomi', 'TECNO']
-  };
-
-  const screenTypeList: FilterListType = {
-    title: 'Тип экрана',
-    propertyName: 'screenType',
-    values: ['OLED', 'IPS', 'AMOLED']
-  };
+  const filtersList: FilterListType[] = [
+    {
+      title: 'Встроенная память',
+      propertyName: 'internalStorage',
+      values: ['64', '128', '256'],
+      unit: 'ГБ',
+    },
+    {
+      title: 'Оперативная память',
+      propertyName: 'ram',
+      values: ['2', '4', '6', '8', '10', '12'],
+      unit: 'ГБ',
+    },
+    {
+      title: 'Бренд',
+      propertyName: 'brand',
+      values: ['DOOGEE', 'Apple', 'ITEL', 'REALME', 'Samsung', 'Xiaomi', 'TECNO']
+    },
+    {
+      title: 'Тип экрана',
+      propertyName: 'screenType',
+      values: ['OLED', 'IPS', 'AMOLED']
+    }
+  ]
 
   const onClickClear = () => {
     dispatch(clearFilters());
+    setIsCleared(true);
   }
+
+  const filters = filtersList.map((item, index) => <FilterItem filterInfo={item} key={index} isCleared={isCleared} />);
 
   return (
     <div className="smartphones-filter">
@@ -54,10 +62,7 @@ const Filter: FC = () => {
         <button className="smartphones-filter__clear-btn" onClick={onClickClear}>Очистить</button>
       </div>
       <FilterPrice />
-      <FilterItem {...internalStorageList} />
-      <FilterItem {...ramList} />
-      <FilterItem {...brandList} />
-      <FilterItem {...screenTypeList} />
+      {filters}
     </div>
   );
 }

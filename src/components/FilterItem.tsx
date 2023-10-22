@@ -1,25 +1,34 @@
 import { FC, useEffect, useState } from 'react';
 import drodDownArrow from '../assets/img/arrow.svg';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { removeFilterValue, setFilterValue } from '../redux/filter/slice';
 import { FilterListType } from './Filter';
 
-const FilterItem: FC<FilterListType> = ({ title, values, unit, propertyName }) => {
-  const [checkedIndexes, setCheckedIndexes] = useState<number[]>([]);
+type FilterItemProps = {
+  filterInfo: FilterListType;
+  isCleared: boolean;
+}
+
+const FilterItem: FC<FilterItemProps> = ({ filterInfo, isCleared } ) => {
+  const { title, values, unit, propertyName } = filterInfo;
   const dispatch = useDispatch();
+  const [checkedList, setCheckedList] = useState<number[]>([]);
+
+  useEffect(() => {
+    if (isCleared) {
+      setCheckedList([]);
+    }
+  }, [isCleared]);
 
   const onInputClick = (index: number) => {
     const filterValue = values[index];
-    let newCheckedIndexes = checkedIndexes;
 
-    if (checkedIndexes.includes(index)) {
-      dispatch(removeFilterValue({ propertyName, filterValue }));
-      newCheckedIndexes = newCheckedIndexes.filter(item => item !== index);
-      setCheckedIndexes(newCheckedIndexes);
-    } else {
+    if (!checkedList.includes(index)) {
+      setCheckedList(checkedList => [...checkedList, index]);
       dispatch(setFilterValue({ propertyName, filterValue }));
-      newCheckedIndexes.push(index);
-      setCheckedIndexes(newCheckedIndexes);
+    } else {
+      setCheckedList(checkedList => checkedList.filter(item => item !== index));
+      dispatch(removeFilterValue({ propertyName, filterValue }));
     }
   };
 
@@ -36,7 +45,8 @@ const FilterItem: FC<FilterListType> = ({ title, values, unit, propertyName }) =
               <input
                 name={title}
                 type="checkbox"
-                onClick={() => onInputClick(index)}
+                checked={checkedList.includes(index)}
+                onChange={() => onInputClick(index)}
               />
               {unit ? item + ' ' + unit : item}
             </label>

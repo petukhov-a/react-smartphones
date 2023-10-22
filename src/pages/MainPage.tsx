@@ -21,7 +21,7 @@ const MainPage: FC = () => {
   const sortTypeName = sortList[sortType].sortProperty;
   const dispatch = useDispatch();
 
-  const filterValues: FilterSliceState = { ...useSelector(selectFilter) };
+  const filterValues = useSelector(selectFilter);
   const { items } = useSelector(selectSmartphones);
   const prevFiltersRef = useRef<FilterSliceState>();
 
@@ -128,7 +128,7 @@ const MainPage: FC = () => {
         <div className="smartphones-header">
           <div className="smartphones-header-heading">
             <h3 className="smartphones-header__title">Смартфоны</h3>
-            <span className="smartphones-header__count">10 товаров</span>
+            <span className="smartphones-header__count">{items.length} товаров</span>
           </div>
           <button className="smartphones-header__mobile-filter-btn">Фильтры</button>
         </div>
