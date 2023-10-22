@@ -2,10 +2,10 @@ import { FC, useEffect, useState } from 'react';
 import drodDownArrow from '../assets/img/arrow.svg';
 import { useDispatch } from 'react-redux';
 import { removeFilterValue, setFilterValue } from '../redux/filter/slice';
-import { FilterListType } from './Filter';
+import { FilterInfo } from './Filter';
 
 type FilterItemProps = {
-  filterInfo: FilterListType;
+  filterInfo: FilterInfo;
   isCleared: boolean;
 }
 

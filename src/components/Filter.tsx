@@ -6,7 +6,7 @@ import { clearFilters } from '../redux/filter/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFilter } from '../redux/filter/selectors';
 
-export type FilterListType = {
+export type FilterInfo = {
   title: string;
   propertyName: FilterName;
   values: string[];
@@ -14,7 +14,6 @@ export type FilterListType = {
 }
 
 const Filter: FC = () => {
-
   const dispatch = useDispatch();
   const [isCleared, setIsCleared] = useState<boolean>(false);
   const filterValues = useSelector(selectFilter);
@@ -23,7 +22,7 @@ const Filter: FC = () => {
     setIsCleared(false);
   }, [filterValues]);
 
-  const filtersList: FilterListType[] = [
+  const filtersList: FilterInfo[] = [
     {
       title: 'Встроенная память',
       propertyName: 'internalStorage',

@@ -11,6 +11,7 @@ import { Smartphone } from "../redux/smartphones/types";
 import { FilterSliceState } from "../redux/filter/types";
 import { setPriceFilterValue } from "../redux/filter/slice";
 import isEqual from 'lodash.isequal';
+import FilterItem from "../components/FilterItem";
 
 const MainPage: FC = () => {
 
@@ -122,13 +123,31 @@ const MainPage: FC = () => {
 
   const smartphones = filteredItems.map((item: Smartphone) => <SmartphoneCard {...item} key={item.id} />);
 
+  const productsString = (items: Smartphone[]) => {
+    const lastDigit = Number(
+      Array.from(
+        String(
+          items.length
+        ))
+        .at(-1)
+      );
+      
+    if (lastDigit === 1) {
+      return 'товар';
+    }
+    if (lastDigit > 1 && lastDigit < 5) {
+      return 'товара';
+    }
+    return 'товаров';
+  }
+
   return (
     <div className="smartphones">
       <div className="container">
         <div className="smartphones-header">
           <div className="smartphones-header-heading">
             <h3 className="smartphones-header__title">Смартфоны</h3>
-            <span className="smartphones-header__count">{items.length} товаров</span>
+            <span className="smartphones-header__count">{filteredItems.length + ' ' + productsString(filteredItems)}</span>
           </div>
           <button className="smartphones-header__mobile-filter-btn">Фильтры</button>
         </div>
