@@ -1,4 +1,4 @@
-import { FC, useEffect, useReducer, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import Sort, { sortList } from "../components/Sort";
 import SmartphoneCard from "../components/SmartphoneCard";
 import Filter from "../components/Filter";
@@ -11,15 +11,16 @@ import { Smartphone } from "../redux/smartphones/types";
 import { FilterSliceState } from "../redux/filter/types";
 import { setPriceFilterValue } from "../redux/filter/slice";
 import isEqual from 'lodash.isequal';
-import FilterItem from "../components/FilterItem";
 
 const MainPage: FC = () => {
 
   const [sortType, setSortType] = useState(0);
+  const [isShowFilter, setIsShowFilter] = useState(false);
   const [isAsc, setIsAsc] = useState(false);
   const order = isAsc ? 'asc' : 'desc';
   const [filteredItems, setFilteredItems] = useState<Smartphone[]>([]);
   const sortTypeName = sortList[sortType].sortProperty;
+  const filterBtnRef = useRef<HTMLButtonElement>(null);
   const dispatch = useDispatch();
 
   const filterValues = useSelector(selectFilter);
@@ -124,13 +125,7 @@ const MainPage: FC = () => {
   const smartphones = filteredItems.map((item: Smartphone) => <SmartphoneCard {...item} key={item.id} />);
 
   const productsString = (items: Smartphone[]) => {
-    const lastDigit = Number(
-      Array.from(
-        String(
-          items.length
-        ))
-        .at(-1)
-      );
+    const lastDigit = Number(items.length) % 10;
       
     if (lastDigit === 1) {
       return 'товар';
@@ -141,25 +136,35 @@ const MainPage: FC = () => {
     return 'товаров';
   }
 
+  let clazz = isShowFilter ? ' shown' : ' hidden';
+
   return (
-    <div className="smartphones">
-      <div className="container">
-        <div className="smartphones-header">
-          <div className="smartphones-header-heading">
-            <h3 className="smartphones-header__title">Смартфоны</h3>
-            <span className="smartphones-header__count">{filteredItems.length + ' ' + productsString(filteredItems)}</span>
+    <>
+      <div className="smartphones">
+        <div className="container">
+          <div className="smartphones-header">
+            <div className="smartphones-header-heading">
+              <h3 className="smartphones-header__title">Смартфоны</h3>
+              <span className="smartphones-header__count">
+                {filteredItems.length + ' ' + productsString(filteredItems)}
+              </span>
+            </div>
+            <button
+              className="smartphones-header__mobile-filter-btn"
+              ref={filterBtnRef}
+              onClick={() => setIsShowFilter(true)}>
+              Фильтры
+            </button>
           </div>
-          <button className="smartphones-header__mobile-filter-btn">Фильтры</button>
-        </div>
-       <Sort onChangeSort={onChangeSort} isAsc={isAsc} sortType={sortType} />
-        <div className="smartphones-content">
-          <div className="smartphones-content-cards">
-            {smartphones}
+          <Sort onChangeSort={onChangeSort} isAsc={isAsc} sortType={sortType} />
+          <div className="smartphones-content">
+            <div className="smartphones-content-cards">{smartphones}</div>
+            <Filter isShow={isShowFilter} setIsShow={setIsShowFilter} filterBtnRef={filterBtnRef} />
           </div>
-          <Filter />
         </div>
       </div>
-    </div>
+      <div className={"overlay" + clazz}></div>
+    </>
   );
 }
 
