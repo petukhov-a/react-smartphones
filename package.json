@@ -46,6 +46,11 @@
     ]
   },
   "devDependencies": {
-    "lodash.isequal": "^4.5.0"
+    "install": "^0.13.0",
+    "localforage": "^1.10.0",
+    "lodash.isequal": "^4.5.0",
+    "match-sorter": "^6.3.1",
+    "react-router-dom": "^6.17.0",
+    "sort-by": "^1.2.0"
   }
 }

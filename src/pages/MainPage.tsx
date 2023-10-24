@@ -21,6 +21,8 @@ const MainPage: FC = () => {
   const [filteredItems, setFilteredItems] = useState<Smartphone[]>([]);
   const sortTypeName = sortList[sortType].sortProperty;
   const filterBtnRef = useRef<HTMLButtonElement>(null);
+  const [clazz, setClazz] = useState('');
+  const isMounted = useRef(false);
   const dispatch = useDispatch();
 
   const filterValues = useSelector(selectFilter);
@@ -136,7 +138,12 @@ const MainPage: FC = () => {
     return 'товаров';
   }
 
-  let clazz = isShowFilter ? ' shown' : ' hidden';
+  useEffect(() => {
+    if (isMounted.current) {
+      setClazz(isShowFilter ? ' shown' : ' hidden');
+    }
+    isMounted.current = true;
+  }, [isShowFilter]);
 
   return (
     <>

@@ -1,9 +1,10 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 const Nav = () => {
   return (
     <nav className="nav">
-      <a href="./../pages/favoritesPage.html" className="nav__link">
+      <Link to="/favorites" className="nav__link">
         <div className="nav__icon">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -18,8 +19,8 @@ const Nav = () => {
           <div className="favorites-counter counter">3</div>
         </div>
         <p>Избранное</p>
-      </a>
-      <a href="./../pages/cartPage.html" className="nav__link">
+      </Link>
+      <Link to="/cart" className="nav__link">
         <div className="nav__icon">
           <svg width="800px" height="800px" viewBox="0 0 32 32" version="1.1">
             <g id="icomoon-ignore"></g>
@@ -30,7 +31,7 @@ const Nav = () => {
           <div className="cart-counter counter">2</div>
         </div>
         <p>Корзина</p>
-      </a>
+      </Link>
     </nav>
   );
 }

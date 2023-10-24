@@ -2,6 +2,7 @@ import React from 'react';
 import Header from '../components/Header';
 import CartItem from '../components/CartItem';
 import CartInfo from '../components/CartInfo';
+import { Link } from 'react-router-dom';
 
 const CartPage = () => {
   return (
@@ -9,9 +10,9 @@ const CartPage = () => {
       <div className="cart">
         <div className="container">
           <div className="cart-heading">
-            <a href="./../index.html" className="cart__exit">
+            <Link to='/' className="cart__exit">
               Вернуться к покупкам
-            </a>
+            </Link>
             <h1 className="cart__heading">Корзина</h1>
           </div>
           <div className="cart-wrapper">

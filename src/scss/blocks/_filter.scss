@@ -87,10 +87,18 @@
     }
 }
 
+@media (max-width: 1280px) {
+    .smartphones-filter {
+        &__heading {
+            font-size: 2.5rem;
+        }
+    }
+}
+
 @media(max-width: 1024px) {
     .smartphones-filter {
         width: 25rem;
-        position: absolute;
+        position: fixed;
         top: 0;
         right: 0;
         height: 100vh;
@@ -111,6 +119,6 @@
 
 @media(max-width: 480px) {
     .smartphones-filter {
-        width: 22rem;
+        // width: 22rem;
     }
 }
