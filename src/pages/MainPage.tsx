@@ -9,8 +9,10 @@ import { selectSmartphones } from "../redux/smartphones/selectors";
 import { setSmartphones } from "../redux/smartphones/slice";
 import { Smartphone } from "../redux/smartphones/types";
 import { FilterSliceState } from "../redux/filter/types";
-import { setPriceFilterValue } from "../redux/filter/slice";
+import { setFilters, setPriceFilterValue } from "../redux/filter/slice";
 import isEqual from 'lodash.isequal';
+import { useNavigate } from "react-router-dom";
+import qs from "qs";
 
 const MainPage: FC = () => {
 
@@ -24,6 +26,7 @@ const MainPage: FC = () => {
   const [clazz, setClazz] = useState('');
   const isMounted = useRef(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const filterValues = useSelector(selectFilter);
   const { items } = useSelector(selectSmartphones);
@@ -53,8 +56,25 @@ const MainPage: FC = () => {
   useEffect(() => {
     if (!isEqual(filterValues, prevFiltersRef.current)) {
       fetchItems(url);
+
+      if (isMounted.current) {
+        const queryString = qs.stringify(filterValues);
+
+        navigate(`?${queryString}`);
+      }
+
+      isMounted.current = true;
     }
   }, [filterValues]);
+
+  useEffect(() => {
+    if (window.location.search) {
+      const params = qs.parse(window.location.search.substring(1)) as unknown;
+      let filters = params as FilterSliceState;
+
+      dispatch(setFilters(filters));
+    }
+  }, []);
 
   useEffect(() => {
     fetchItems(url);

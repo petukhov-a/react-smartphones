@@ -21,6 +21,13 @@ export const filterSlice = createSlice({
 
       state[filterName].push(filterValue);
     },
+    setFilters(state, action: PayloadAction<FilterSliceState>) {
+      const filters = action.payload;
+      for (let key in filters) {
+        const filterKey = key as FilterName;
+        state[filterKey] = filters[filterKey];
+      }
+    },
     removeFilterValue(state, action: PayloadAction<FilterSetType>) {
       const filterName = action.payload.propertyName;
       const filterValue = action.payload.filterValue;
@@ -48,6 +55,6 @@ export const filterSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setFilterValue, setSearchValue, removeFilterValue, setPriceFilterValue, clearFilters  } = filterSlice.actions
+export const { setFilterValue, setSearchValue, removeFilterValue, setPriceFilterValue, clearFilters, setFilters  } = filterSlice.actions
 
 export default filterSlice.reducer

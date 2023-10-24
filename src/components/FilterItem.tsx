@@ -1,8 +1,9 @@
 import { FC, useEffect, useState } from 'react';
 import drodDownArrow from '../assets/img/arrow.svg';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { removeFilterValue, setFilterValue } from '../redux/filter/slice';
 import { FilterInfo } from './Filter';
+import { selectFilter } from '../redux/filter/selectors';
 
 type FilterItemProps = {
   filterInfo: FilterInfo;
@@ -13,12 +14,27 @@ const FilterItem: FC<FilterItemProps> = ({ filterInfo, isCleared } ) => {
   const { title, values, unit, propertyName } = filterInfo;
   const dispatch = useDispatch();
   const [checkedList, setCheckedList] = useState<number[]>([]);
+  const filterValues = useSelector(selectFilter);
 
   useEffect(() => {
     if (isCleared) {
       setCheckedList([]);
     }
   }, [isCleared]);
+
+  useEffect(() => {
+    const filterValue = filterValues[propertyName];
+    if (filterValue.length !== 0) {
+      console.log(filterValue);
+      values.forEach((value, index) => {
+        if (filterValue.includes(value)) {
+          setCheckedList(checkedList => [...checkedList, index]);
+        } else {
+          setCheckedList(checkedList => checkedList.filter(item => item !== index));
+        }
+      });
+    }
+  }, [filterValues]);
 
   const onInputClick = (index: number) => {
     const filterValue = values[index];
