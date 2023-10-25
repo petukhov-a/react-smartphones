@@ -1,11 +1,12 @@
 import React, {MouseEvent, FC, useState, useRef } from 'react';
 import dropDownArrow from '../assets/img/arrow.svg';
 import sortDescending from '../assets/img/sort-descending.svg';
+import { useSelector } from 'react-redux';
+import { selectFilter } from '../redux/filter/selectors';
 
 type SortProps = {
-  onChangeSort: (i: number) => void;
+  onChangeSort: (sortName: string) => void;
   isAsc: boolean;
-  sortType: number;
 }
 
 export const sortList = [
@@ -14,14 +15,15 @@ export const sortList = [
   {name: "по названию", sortProperty: "name"},
 ];
 
-const Sort: FC<SortProps> = ({onChangeSort, isAsc, sortType}) => {
+const Sort: FC<SortProps> = ({onChangeSort, isAsc}) => {
 
   const clazz = isAsc ? ' rotate' : '';
+  const { sortProperty } = useSelector(selectFilter); 
 
   const sortItemsElements = sortList.map((item, index) => (
     <li
-      onClick={() => onChangeSort(index)}
-      className={sortType === index ? 'active' : ''}
+      onClick={() => onChangeSort(item.sortProperty)}
+      className={item.sortProperty === sortProperty ? 'active' : ''}
       key={index}>
         {item.name}
       <img

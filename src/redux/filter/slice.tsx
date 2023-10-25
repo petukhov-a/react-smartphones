@@ -9,6 +9,7 @@ const initialState: FilterSliceState = {
   brand: [],
   screenType: [],
   searchValue: '',
+  sortProperty: 'price',
 }
 
 export const filterSlice = createSlice({
@@ -27,6 +28,9 @@ export const filterSlice = createSlice({
         const filterKey = key as FilterName;
         state[filterKey] = filters[filterKey];
       }
+    },
+    setSort(state, action: PayloadAction<string>) {
+      state.sortProperty = action.payload;
     },
     removeFilterValue(state, action: PayloadAction<FilterSetType>) {
       const filterName = action.payload.propertyName;
@@ -49,12 +53,16 @@ export const filterSlice = createSlice({
         if (filter === 'prices') {
           state[filter] = [0, 0];
         }
+
+        if (filter === 'sortProperty') {
+          state[filter] = 'price';
+        }
       }
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setFilterValue, setSearchValue, removeFilterValue, setPriceFilterValue, clearFilters, setFilters  } = filterSlice.actions
+export const { setFilterValue, setSearchValue, removeFilterValue, setPriceFilterValue, clearFilters, setFilters, setSort  } = filterSlice.actions
 
 export default filterSlice.reducer

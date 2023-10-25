@@ -9,19 +9,18 @@ import { selectSmartphones } from "../redux/smartphones/selectors";
 import { setSmartphones } from "../redux/smartphones/slice";
 import { Smartphone } from "../redux/smartphones/types";
 import { FilterSliceState } from "../redux/filter/types";
-import { setFilters, setPriceFilterValue } from "../redux/filter/slice";
+import { setFilters, setPriceFilterValue, setSort } from "../redux/filter/slice";
 import isEqual from 'lodash.isequal';
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
 
 const MainPage: FC = () => {
 
-  const [sortType, setSortType] = useState(0);
   const [isShowFilter, setIsShowFilter] = useState(false);
   const [isAsc, setIsAsc] = useState(false);
   const order = isAsc ? 'asc' : 'desc';
   const [filteredItems, setFilteredItems] = useState<Smartphone[]>([]);
-  const sortTypeName = sortList[sortType].sortProperty;
+  const { sortProperty } = useSelector(selectFilter);
   const filterBtnRef = useRef<HTMLButtonElement>(null);
   const [clazz, setClazz] = useState('');
   const isMounted = useRef(false);
@@ -34,7 +33,7 @@ const MainPage: FC = () => {
 
   const search = filterValues.searchValue ? `&name=${filterValues.searchValue}` : '';
 
-  const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortTypeName}&order=${order}${search}`;
+  const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortProperty}&order=${order}${search}`;
 
   const fetchItems = (url: string) => {
     fetch(url)
@@ -55,12 +54,12 @@ const MainPage: FC = () => {
 
   useEffect(() => {
       fetchItems(url);
-  }, [sortType, order, search]);
+  }, [sortProperty, order, search]);
 
   useEffect(() => {
     if (isMounted.current) {
       if (!isEqual(filterValues, prevFiltersRef.current)) {
-        let queryString = qs.stringify(filterValues);
+        let queryString = qs.stringify({...filterValues});
         if (filterValues.searchValue === '') {
           queryString = queryString.replace('&searchValue=', '');
         }
@@ -82,19 +81,20 @@ const MainPage: FC = () => {
     }
   }, []);
 
-  const onChangeSort = (index: number) => {
-    if (sortType !== index) {
+  const onChangeSort = (sortName: string) => {
+    if (sortProperty !== sortName) {
       setIsAsc(false);
     } else {
       setIsAsc(isAsc => !isAsc);
     }
-    setSortType(index);
+    dispatch(setSort(sortName));
   }
 
-  const isFilterValueExist = (filterName: FilterName | 'searchValue' | 'prices') => {
+  const isFilterValueExist = (filterName: FilterName | 'searchValue' | 'prices' | 'sortProperty') => {
     if (filterName !== 'searchValue' &&
         filterValues[filterName].length !== 0 &&
-        filterName !== 'prices') {
+        filterName !== 'prices' &&
+        filterName !== 'sortProperty') {
       return true;
     }
   }
@@ -187,7 +187,7 @@ const MainPage: FC = () => {
               Фильтры
             </button>
           </div>
-          <Sort onChangeSort={onChangeSort} isAsc={isAsc} sortType={sortType} />
+          <Sort onChangeSort={onChangeSort} isAsc={isAsc} />
           <div className="smartphones-content">
             <div className="smartphones-content-cards">{smartphones}</div>
             <Filter isShow={isShowFilter} setIsShow={setIsShowFilter} filterBtnRef={filterBtnRef} />

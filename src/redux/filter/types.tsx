@@ -5,6 +5,7 @@ export interface FilterSliceState {
   brand: string[];
   screenType: string[];
   searchValue: string;
+  sortProperty: string;
 }
 
 export interface FilterSetType {
