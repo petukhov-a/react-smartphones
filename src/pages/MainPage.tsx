@@ -54,17 +54,23 @@ const MainPage: FC = () => {
   }
 
   useEffect(() => {
-    if (!isEqual(filterValues, prevFiltersRef.current)) {
       fetchItems(url);
+  }, [sortType, order, search]);
 
-      if (isMounted.current) {
-        const queryString = qs.stringify(filterValues);
-
+  useEffect(() => {
+    if (isMounted.current) {
+      if (!isEqual(filterValues, prevFiltersRef.current)) {
+        let queryString = qs.stringify(filterValues);
+        if (filterValues.searchValue === '') {
+          queryString = queryString.replace('&searchValue=', '');
+        }
+  
         navigate(`?${queryString}`);
       }
-
-      isMounted.current = true;
+      prevFiltersRef.current = filterValues;
     }
+
+    isMounted.current = true;
   }, [filterValues]);
 
   useEffect(() => {
@@ -75,10 +81,6 @@ const MainPage: FC = () => {
       dispatch(setFilters(filters));
     }
   }, []);
-
-  useEffect(() => {
-    fetchItems(url);
-  }, [order, sortTypeName]);
 
   const onChangeSort = (index: number) => {
     if (sortType !== index) {
@@ -133,16 +135,17 @@ const MainPage: FC = () => {
   }
 
   useEffect(() => {
-    const newItems = items.filter(item => isMatchFilters(item));
+    if (!isEqual(filterValues, prevFiltersRef)) {
+      const newItems = items.filter(item => isMatchFilters(item));
 
-    setFilteredItems(newItems);
-
-    if (filterValues.prices.toString() === `0,0`) {
-      setMinMaxPrice(items);
+      setFilteredItems(newItems);
+  
+      if (filterValues.prices.toString() === `0,0`) {
+        setMinMaxPrice(items);
+      }
     }
-
     prevFiltersRef.current = filterValues;
-  }, [items]);
+  }, [filterValues, items]);
 
   const smartphones = filteredItems.map((item: Smartphone) => <SmartphoneCard {...item} key={item.id} />);
 
@@ -162,6 +165,7 @@ const MainPage: FC = () => {
     if (isMounted.current) {
       setClazz(isShowFilter ? ' shown' : ' hidden');
     }
+
     isMounted.current = true;
   }, [isShowFilter]);
 
