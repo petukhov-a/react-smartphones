@@ -48,15 +48,17 @@ export const filterSlice = createSlice({
     clearFilters(state) {
       for (let filter in state) {
         const filterKey = filter as FilterName;
-        state[filterKey] = [];
 
         if (filter === 'prices') {
           state[filter] = [0, 0];
-        }
-
-        if (filter === 'sortProperty') {
+        } else if (filter === 'sortProperty') {
           state[filter] = 'price';
+        } else if (filter === 'searchValue') {
+          // pass;
+        } else {
+          state[filterKey] = [];
         }
+        
       }
     }
   },

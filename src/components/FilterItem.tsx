@@ -25,7 +25,6 @@ const FilterItem: FC<FilterItemProps> = ({ filterInfo, isCleared } ) => {
   useEffect(() => {
     const filterValue = filterValues[propertyName];
     if (filterValue.length !== 0) {
-      console.log(filterValue);
       values.forEach((value, index) => {
         if (filterValue.includes(value)) {
           setCheckedList(checkedList => [...checkedList, index]);

@@ -33,7 +33,7 @@ const MainPage: FC = () => {
 
   const search = filterValues.searchValue ? `&name=${filterValues.searchValue}` : '';
 
-  const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortProperty}&order=${order}${search}`;
+  const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortProperty}&order=${order}`;
 
   const fetchItems = (url: string) => {
     fetch(url)
@@ -90,6 +90,8 @@ const MainPage: FC = () => {
     dispatch(setSort(sortName));
   }
 
+
+
   const isFilterValueExist = (filterName: FilterName | 'searchValue' | 'prices' | 'sortProperty') => {
     if (filterName !== 'searchValue' &&
         filterValues[filterName].length !== 0 &&
@@ -108,6 +110,22 @@ const MainPage: FC = () => {
       return false;
     }
 
+    if (!isMatchSearch(item)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  const isMatchSearch = (item: Smartphone) => {
+    if (filterValues.searchValue !== '') {
+      const itemName = item.name.toLowerCase();
+      const searchValue = filterValues.searchValue.toLowerCase();
+      if (itemName.includes(searchValue)) {
+        return true;
+      }
+      return false;
+    }
     return true;
   }
 
