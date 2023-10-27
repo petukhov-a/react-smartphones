@@ -1,13 +1,19 @@
-import React, { ChangeEvent, useCallback, useReducer, useRef, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import searchIcon from '../assets/img/search.svg';
 import { setSearchValue } from '../redux/filter/slice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import debounce from 'lodash.debounce';
+import { selectFilter } from '../redux/filter/selectors';
 
 const Search = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState('');
+  const { searchValue } = useSelector(selectFilter);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setValue(searchValue);
+  }, [searchValue]);
 
   const updateSearchValue = useCallback(
     debounce((str: string) => {
@@ -25,7 +31,7 @@ const Search = () => {
     setValue('');
     dispatch(setSearchValue(''));
     inputRef.current?.focus();
-  } 
+  }
 
   return (
     <div className="header-search">
@@ -49,9 +55,9 @@ const Search = () => {
           <path
             d="M19 5L4.99998 19M5.00001 5L19 19"
             stroke="#000000"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       )}

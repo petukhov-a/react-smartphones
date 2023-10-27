@@ -1,6 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import smartphoneImg from '../assets/img/smartphones/DOOGEE-V30.webp';
 import { Smartphone } from '../redux/smartphones/types';
+import { Link } from 'react-router-dom';
 
 const SmartphoneCard: FC<Smartphone> = ( {id, name, img, rating, price, screenType, screenTypeFull, screenSize, screenResolution, processor, ram, internalStorage, networkSupport, fingerprintScanner, dimensions} ) => {
 
@@ -8,14 +9,14 @@ const SmartphoneCard: FC<Smartphone> = ( {id, name, img, rating, price, screenTy
     <>
       <div className="smartphone-card card-hover">
         <div className="smartphone-card-wrapper">
-          <a href="./../pages/smartphonePage.html" className="smartphone-card__img">
+          <Link to='/smartphone' className="smartphone-card__img">
             <img src={img} alt="" />
-          </a>
+          </Link>
           <div className="smartphone-card-desq">
             <div className="smartphone-card-heading">
-              <a href="./../pages/smartphonePage.html" className="smartphone-name">
+              <Link to='/smartphone' className="smartphone-name">
                 {name}
-              </a>
+              </Link>
               <p className="smartphone-id">Код товара: {id}</p>
             </div>
             <div className="separator"></div>

@@ -31,8 +31,6 @@ const MainPage: FC = () => {
   const { items } = useSelector(selectSmartphones);
   const prevFiltersRef = useRef<FilterSliceState>();
 
-  const search = filterValues.searchValue ? `&name=${filterValues.searchValue}` : '';
-
   const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortProperty}&order=${order}`;
 
   const fetchItems = (url: string) => {
@@ -54,12 +52,20 @@ const MainPage: FC = () => {
 
   useEffect(() => {
       fetchItems(url);
-  }, [sortProperty, order, search]);
+  }, [sortProperty, order]);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      setClazz(isShowFilter ? ' shown' : ' hidden');
+    }
+
+    isMounted.current = true;
+  }, [isShowFilter]);
 
   useEffect(() => {
     if (isMounted.current) {
       if (!isEqual(filterValues, prevFiltersRef.current)) {
-        let queryString = qs.stringify({...filterValues});
+        let queryString = qs.stringify(filterValues);
         if (filterValues.searchValue === '') {
           queryString = queryString.replace('&searchValue=', '');
         }
@@ -90,14 +96,16 @@ const MainPage: FC = () => {
     dispatch(setSort(sortName));
   }
 
+  const isFilterCheckboxExist = (filterName: FilterName | 'prices') => {
+    if (filterName !== 'prices') {
 
+      const filterValue = filterValues[filterName];
+      if (Array.isArray(filterValue)) {
+        if (filterValue.length !== 0) {
+          return true;
+        }
+      }
 
-  const isFilterValueExist = (filterName: FilterName | 'searchValue' | 'prices' | 'sortProperty') => {
-    if (filterName !== 'searchValue' &&
-        filterValues[filterName].length !== 0 &&
-        filterName !== 'prices' &&
-        filterName !== 'sortProperty') {
-      return true;
     }
   }
 
@@ -132,7 +140,7 @@ const MainPage: FC = () => {
   const isMatchCheckboxFilters = (item: Smartphone) => {
     for (let key in filterValues) {
       const filterKey = key as FilterName;
-      if (isFilterValueExist(filterKey)) {
+      if (isFilterCheckboxExist(filterKey)) {
         const matchingValue = String(item[filterKey]);
         const isMatchFilter = filterValues[filterKey].includes(matchingValue);
         if (!isMatchFilter) {
@@ -178,14 +186,6 @@ const MainPage: FC = () => {
     }
     return 'товаров';
   }
-
-  useEffect(() => {
-    if (isMounted.current) {
-      setClazz(isShowFilter ? ' shown' : ' hidden');
-    }
-
-    isMounted.current = true;
-  }, [isShowFilter]);
 
   return (
     <>

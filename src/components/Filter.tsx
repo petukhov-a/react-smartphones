@@ -6,6 +6,7 @@ import { clearFilters } from '../redux/filter/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFilter } from '../redux/filter/selectors';
 import { useScrollBlock } from '../hooks/useScrollBlock';
+import { handleOutsideClick } from '../utils/handleOutsideClick';
 
 export type FilterInfo = {
   title: string;
@@ -61,18 +62,12 @@ const Filter: FC<FilterProps> = ( {isShow, setIsShow, filterBtnRef} ) => {
   }, [isShow]);
 
   useEffect(() => {
-    const hadndleOutsideClick = (event: MouseEvent) => {
-      if (filterRef.current && filterBtnRef.current && 
-        !event.composedPath().includes(filterRef.current) &&
-        !event.composedPath().includes(filterBtnRef.current)) {
-        setIsShow(false);
-      }
+    const filter = filterRef.current;
+    const btn = filterBtnRef.current;
 
-    }
+    document.body.addEventListener('click', (e) => handleOutsideClick(e, setIsShow, filter, btn));
 
-    document.body.addEventListener('click', hadndleOutsideClick);
-
-    return () => document.body.removeEventListener('click', hadndleOutsideClick);
+    return () => document.body.removeEventListener('click', (e) => handleOutsideClick(e, setIsShow, filter, btn));
   }, []);
 
   const onClickClear = () => {

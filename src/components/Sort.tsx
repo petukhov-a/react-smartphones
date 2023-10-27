@@ -1,8 +1,9 @@
-import React, {MouseEvent, FC, useState, useRef } from 'react';
+import React, {MouseEvent, FC, useState, useRef, useEffect } from 'react';
 import dropDownArrow from '../assets/img/arrow.svg';
 import sortDescending from '../assets/img/sort-descending.svg';
 import { useSelector } from 'react-redux';
 import { selectFilter } from '../redux/filter/selectors';
+import { handleOutsideClick } from '../utils/handleOutsideClick';
 
 type SortProps = {
   onChangeSort: (sortName: string) => void;
@@ -19,6 +20,26 @@ const Sort: FC<SortProps> = ({onChangeSort, isAsc}) => {
 
   const clazz = isAsc ? ' rotate' : '';
   const { sortProperty } = useSelector(selectFilter); 
+  const sortListRef = useRef<HTMLDivElement>(null);
+  const [isShow, setIsShow] = useState(false);
+
+  useEffect(() => {
+    const sortList = sortListRef.current;
+
+    document.addEventListener('click', (e) => handleOutsideClick(e, setIsShow, sortList));
+
+    return document.removeEventListener('click', (e) => handleOutsideClick(e, setIsShow, sortList));
+  }, []);
+
+  useEffect(() => {
+    const sortList = sortListRef.current as HTMLDivElement;
+
+    if (isShow) {
+      sortList.classList.add('active');
+    } else {
+      sortList.classList.remove('active');
+    }
+  }, [isShow]);
 
   const sortItemsElements = sortList.map((item, index) => (
     <li
@@ -39,11 +60,11 @@ const Sort: FC<SortProps> = ({onChangeSort, isAsc}) => {
           {sortItemsElements}
         </ul>
       </div>
-      <div className="sort-list-mobile">
-        <button className="sort-list-mobile-btn">
+      <div className="sort-list-mobile" ref={sortListRef}>
+        <button className="sort-list-mobile-btn" onClick={() => setIsShow(isShow => !isShow)}>
           <span>по рейтингу</span>
-          <img src={dropDownArrow} alt="" />
         </button>
+        <img className='drop-down-arrow' src={dropDownArrow} alt="" />
         <ul>
           <li>по возрастанию цены</li>
           <li>по убыванию цены</li>

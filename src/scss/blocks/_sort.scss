@@ -72,26 +72,20 @@
                     font-weight: 400;
                 }
             }
-        }
-
-        &-list-mobile-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.6rem;
-
-            img {
-                width: 1.8rem;
-                height: 1.8rem;
-                transform: rotate(-180deg);
-                transition: transform 0.2s ease-in-out;
-            }
 
             &.active {
-                img {
+                ul {
+                    display: flex;
+                }
+
+                .drop-down-arrow {
                     transform: rotate(0);
                 }
             }
+        }
+
+        &-list-mobile-btn {
+            font-size: 1.6rem;
         }
     }
 }
