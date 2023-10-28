@@ -1,5 +1,5 @@
 import React from 'react';
-import Sort from '../components/Sort';
+import Sort from '../components/SortList';
 import FavoritesCard from '../components/FavoritesCard';
 
 const FavoritesPage = () => {

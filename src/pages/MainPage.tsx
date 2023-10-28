@@ -1,8 +1,7 @@
 import { FC, useEffect, useRef, useState } from "react";
-import Sort, { sortList } from "../components/Sort";
 import SmartphoneCard from "../components/SmartphoneCard";
 import Filter from "../components/Filter";
-import { FilterName } from "../redux/filter/types";
+import { FilterName, Sort } from "../redux/filter/types";
 import { selectFilter } from "../redux/filter/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { selectSmartphones } from "../redux/smartphones/selectors";
@@ -13,25 +12,28 @@ import { setFilters, setPriceFilterValue, setSort } from "../redux/filter/slice"
 import isEqual from 'lodash.isequal';
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
+import SortList from "../components/SortList";
 
 const MainPage: FC = () => {
 
   const [isShowFilter, setIsShowFilter] = useState(false);
   const [isAsc, setIsAsc] = useState(false);
-  const order = isAsc ? 'asc' : 'desc';
   const [filteredItems, setFilteredItems] = useState<Smartphone[]>([]);
-  const { sortProperty } = useSelector(selectFilter);
+  const { sort } = useSelector(selectFilter);
   const filterBtnRef = useRef<HTMLButtonElement>(null);
   const [clazz, setClazz] = useState('');
-  const isMounted = useRef(false);
+  const isMountedNavigate = useRef(false);
+  const isMountedMobileFilter = useRef(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const filterValues = useSelector(selectFilter);
+  const order = isAsc ? 'asc' : 'desc';
+  // const [order, setOrder] = useState('desc');
   const { items } = useSelector(selectSmartphones);
   const prevFiltersRef = useRef<FilterSliceState>();
 
-  const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sortProperty}&order=${order}`;
+  const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sort.property}&order=${order}`;
 
   const fetchItems = (url: string) => {
     fetch(url)
@@ -51,21 +53,15 @@ const MainPage: FC = () => {
   }
 
   useEffect(() => {
-      fetchItems(url);
-  }, [sortProperty, order]);
+    fetchItems(url);
+  }, [sort, order]);
+
 
   useEffect(() => {
-    if (isMounted.current) {
-      setClazz(isShowFilter ? ' shown' : ' hidden');
-    }
-
-    isMounted.current = true;
-  }, [isShowFilter]);
-
-  useEffect(() => {
-    if (isMounted.current) {
+    if (isMountedNavigate.current) {
       if (!isEqual(filterValues, prevFiltersRef.current)) {
         let queryString = qs.stringify(filterValues);
+
         if (filterValues.searchValue === '') {
           queryString = queryString.replace('&searchValue=', '');
         }
@@ -75,26 +71,46 @@ const MainPage: FC = () => {
       prevFiltersRef.current = filterValues;
     }
 
-    isMounted.current = true;
+    isMountedNavigate.current = true;
   }, [filterValues]);
+
+    useEffect(() => {
+    if (isMountedMobileFilter.current) {
+      setClazz(isShowFilter ? ' shown' : ' hidden');
+    }
+
+    isMountedMobileFilter.current = true;
+
+  }, [isShowFilter]);
 
   useEffect(() => {
     if (window.location.search) {
       const params = qs.parse(window.location.search.substring(1)) as unknown;
-      let filters = params as FilterSliceState;
+      const filters = params as FilterSliceState;
 
       dispatch(setFilters(filters));
     }
   }, []);
 
-  const onChangeSort = (sortName: string) => {
-    if (sortProperty !== sortName) {
-      setIsAsc(false);
+  const onChangeSort = (sortParams: Sort, isMobile: boolean) => {
+    if (!isMobile) {
+
+      if (sort.property !== sortParams.property) {
+        setIsAsc(false);
+      } else {
+        setIsAsc(isAsc => !isAsc);
+      }
+
     } else {
-      setIsAsc(isAsc => !isAsc);
+      setIsAsc(sortParams.isAsc ? true : false);
     }
-    dispatch(setSort(sortName));
+
+    dispatch(setSort(sortParams));
   }
+
+  useEffect(() => {
+    dispatch(setSort({...sort, isAsc}));
+  }, [isAsc]);
 
   const isFilterCheckboxExist = (filterName: FilterName | 'prices') => {
     if (filterName !== 'prices') {
@@ -205,7 +221,7 @@ const MainPage: FC = () => {
               Фильтры
             </button>
           </div>
-          <Sort onChangeSort={onChangeSort} isAsc={isAsc} />
+          <SortList onChangeSort={onChangeSort} isAsc={isAsc} />
           <div className="smartphones-content">
             <div className="smartphones-content-cards">{smartphones}</div>
             <Filter isShow={isShowFilter} setIsShow={setIsShowFilter} filterBtnRef={filterBtnRef} />

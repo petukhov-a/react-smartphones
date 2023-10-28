@@ -5,7 +5,13 @@ export interface FilterSliceState {
   brand: string[];
   screenType: string[];
   searchValue: string;
-  sortProperty: string;
+  sort: Sort,
+}
+
+export interface Sort {
+  property: string,
+  name: string,
+  isAsc?: boolean,
 }
 
 export interface FilterSetType {

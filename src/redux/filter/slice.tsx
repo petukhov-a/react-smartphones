@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { FilterName, FilterPrices, FilterSetType, FilterSliceState } from './types';
+import { FilterName, FilterPrices, FilterSetType, FilterSliceState, Sort } from './types';
 
 const initialState: FilterSliceState = {
   prices: [0, 0],
@@ -9,7 +9,11 @@ const initialState: FilterSliceState = {
   brand: [],
   screenType: [],
   searchValue: '',
-  sortProperty: 'price',
+  sort: {
+    property: 'price',
+    name: 'по цене',
+    isAsc: false
+  }
 }
 
 export const filterSlice = createSlice({
@@ -29,8 +33,8 @@ export const filterSlice = createSlice({
         state[filterKey] = filters[filterKey];
       }
     },
-    setSort(state, action: PayloadAction<string>) {
-      state.sortProperty = action.payload;
+    setSort(state, action: PayloadAction<Sort>) {
+      state.sort = action.payload;
     },
     removeFilterValue(state, action: PayloadAction<FilterSetType>) {
       const filterName = action.payload.propertyName;
@@ -51,8 +55,10 @@ export const filterSlice = createSlice({
 
         if (filter === 'prices') {
           state[filter] = [0, 0];
-        } else if (filter === 'sortProperty') {
-          state[filter] = 'price';
+        } else if (filter === 'sort') {
+          state.sort.property = 'price';
+          state.sort.name = 'по цене';
+          state.sort.isAsc = false;
         } else if (filter === 'searchValue') {
           // pass;
         } else {
