@@ -7,24 +7,39 @@ import { handleOutsideClick } from '../utils/handleOutsideClick';
 import { Sort } from '../redux/filter/types';
 
 type SortProps = {
-  onChangeSort: (sort: Sort, isMobile: boolean) => void;
+  onChangeSort: (sort: Sort, isMobile: boolean, index: number) => void;
   isAsc: boolean;
 }
 
 export const sortList: Sort[] = [
-  {name: "по цене", property: "price"},
-  {name: "по рейтингу", property: "rating"},
-  {name: "по названию", property: "name"},
+  {title: "по цене", property: "price"},
+  {title: "по рейтингу", property: "rating"},
+  {title: "по названию", property: "name"},
 ];
 
-const mobileSortList: Sort[] = [
-  {name: 'по возрастанию цены', property: 'price', isAsc: true},
-  {name: 'по убыванию цены', property: 'price', isAsc: false},
-  {name: 'по возрастанию рейтинга', property: 'rating', isAsc: true},
-  {name: 'по убыванию рейтинга', property: 'rating', isAsc: false},
-  {name: 'по названию (от А до Я)', property: 'name', isAsc: true},
-  {name: 'по названию (от Я до А)', property: 'name', isAsc: false},
+export const mobileSortList: Sort[] = [
+  {mobileTitle: 'по возрастанию цены', property: 'price', isAsc: true},
+  {mobileTitle: 'по убыванию цены', property: 'price', isAsc: false},
+  {mobileTitle: 'по возрастанию рейтинга', property: 'rating', isAsc: true},
+  {mobileTitle: 'по убыванию рейтинга', property: 'rating', isAsc: false},
+  {mobileTitle: 'по названию (от А до Я)', property: 'name', isAsc: true},
+  {mobileTitle: 'по названию (от Я до А)', property: 'name', isAsc: false},
 ]
+
+export const sortMobileTitles = {
+  price: {
+    asc: "по возрастанию цены",
+    desc: "по убыванию цены",
+  },
+  rating: {
+    asc: "по возрастанию рейтинга",
+    desc: "по убыванию рейтинга"
+  },
+  name: {
+    asc: "по названию (от А до Я)",
+    desc: "по названию (от Я до А)"
+  }
+}
 
 const SortList: FC<SortProps> = ({onChangeSort, isAsc}) => {
 
@@ -51,8 +66,8 @@ const SortList: FC<SortProps> = ({onChangeSort, isAsc}) => {
     }
   }, [isShow]);
 
-  const onSelectItem = (item: Sort, isMobile: boolean) => {
-    onChangeSort(item, isMobile);
+  const onSelectItem = (item: Sort, isMobile: boolean, index: number) => {
+    onChangeSort(item, isMobile, index);
     if (isMobile) {
       setIsShow(false);
     }
@@ -60,10 +75,10 @@ const SortList: FC<SortProps> = ({onChangeSort, isAsc}) => {
 
   const sortItemsElements = sortList.map((item, index) => (
     <li
-      onClick={() => onSelectItem(item, false)}
+      onClick={() => onSelectItem(item, false, index)}
       className={item.property === sort.property ? 'active' : ''}
       key={index}>
-        {item.name}
+        {item.title}
       <img
         className={"sort-order-img" + clazz}
         src={sortDescending} />
@@ -72,10 +87,10 @@ const SortList: FC<SortProps> = ({onChangeSort, isAsc}) => {
 
   const mobileSortItems = mobileSortList.map((item, index) => (
     <li 
-      onClick={() => onSelectItem(item, true)}
+      onClick={() => onSelectItem(item, true, index)}
       key={index}
       className={item.property === sort.property ? 'active': ''}>
-        {item.name}
+        {item.mobileTitle}
     </li>
   ));
 
@@ -89,7 +104,7 @@ const SortList: FC<SortProps> = ({onChangeSort, isAsc}) => {
       <div className="sort-list-mobile" ref={sortListMobileRef}>
         <button className="sort-list-mobile-btn" onClick={() => setIsShow(isShow => !isShow)}>
           <span>
-            {sort.name}
+            {sort.mobileTitle}
           </span>
         </button>
         <img className='drop-down-arrow' src={dropDownArrow} alt="" />

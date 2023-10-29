@@ -9,8 +9,9 @@ export interface FilterSliceState {
 }
 
 export interface Sort {
-  property: string,
-  name: string,
+  property: SortProperty,
+  title?: string,
+  mobileTitle?: string,
   isAsc?: boolean,
 }
 
@@ -18,6 +19,8 @@ export interface FilterSetType {
   propertyName: FilterName;
   filterValue: string;
 }
+
+export type SortProperty = 'price' | 'rating' | 'name'
 
 export type FilterName = 'internalStorage' | 'ram' | 'brand' | 'screenType';
 

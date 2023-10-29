@@ -11,7 +11,8 @@ const initialState: FilterSliceState = {
   searchValue: '',
   sort: {
     property: 'price',
-    name: 'по цене',
+    title: 'по цене',
+    mobileTitle: 'по убыванию цены',
     isAsc: false
   }
 }
@@ -57,7 +58,7 @@ export const filterSlice = createSlice({
           state[filter] = [0, 0];
         } else if (filter === 'sort') {
           state.sort.property = 'price';
-          state.sort.name = 'по цене';
+          state.sort.title = 'по цене';
           state.sort.isAsc = false;
         } else if (filter === 'searchValue') {
           // pass;

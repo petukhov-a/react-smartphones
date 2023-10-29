@@ -12,7 +12,7 @@ import { setFilters, setPriceFilterValue, setSort } from "../redux/filter/slice"
 import isEqual from 'lodash.isequal';
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
-import SortList from "../components/SortList";
+import SortList, { sortMobileTitles } from "../components/SortList";
 
 const MainPage: FC = () => {
 
@@ -92,7 +92,7 @@ const MainPage: FC = () => {
     }
   }, []);
 
-  const onChangeSort = (sortParams: Sort, isMobile: boolean) => {
+  const onChangeSort = (sortParams: Sort, isMobile: boolean, index: number) => {
     if (!isMobile) {
 
       if (sort.property !== sortParams.property) {
@@ -101,16 +101,21 @@ const MainPage: FC = () => {
         setIsAsc(isAsc => !isAsc);
       }
 
-    } else {
-      setIsAsc(sortParams.isAsc ? true : false);
+      if (!isAsc) {
+        const mobileTitle = sortMobileTitles[sortParams.property].asc;
+        dispatch(setSort({...sortParams, mobileTitle}));
+      } else {
+        const mobileTitle = sortMobileTitles[sortParams.property].desc;
+        dispatch(setSort({...sortParams, mobileTitle}));
+      }
+
     }
 
-    dispatch(setSort(sortParams));
+    if (isMobile) {
+      setIsAsc(sortParams.isAsc ? true : false);
+      dispatch(setSort(sortParams));
+    }
   }
-
-  useEffect(() => {
-    dispatch(setSort({...sort, isAsc}));
-  }, [isAsc]);
 
   const isFilterCheckboxExist = (filterName: FilterName | 'prices') => {
     if (filterName !== 'prices') {
