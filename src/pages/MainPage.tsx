@@ -12,7 +12,7 @@ import { setFilters, setPriceFilterValue, setSort } from "../redux/filter/slice"
 import isEqual from 'lodash.isequal';
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
-import SortList, { sortMobileTitles } from "../components/SortList";
+import SortList, { mobileSortList, SortTitle } from "../components/SortList";
 
 const MainPage: FC = () => {
 
@@ -29,7 +29,7 @@ const MainPage: FC = () => {
 
   const filterValues = useSelector(selectFilter);
   const order = isAsc ? 'asc' : 'desc';
-  // const [order, setOrder] = useState('desc');
+  // const [order, setOrder] = useState(isAsc ? 'asc' : 'desc');
   const { items } = useSelector(selectSmartphones);
   const prevFiltersRef = useRef<FilterSliceState>();
 
@@ -101,14 +101,19 @@ const MainPage: FC = () => {
         setIsAsc(isAsc => !isAsc);
       }
 
-      if (!isAsc) {
-        const mobileTitle = sortMobileTitles[sortParams.property].asc;
-        dispatch(setSort({...sortParams, mobileTitle}));
-      } else {
-        const mobileTitle = sortMobileTitles[sortParams.property].desc;
-        dispatch(setSort({...sortParams, mobileTitle}));
-      }
+      const mobileSortItems = mobileSortList.filter(item => 
+        item.property === sortParams.property
+      );
 
+      if (!isAsc) {
+        const mobileSortItem = mobileSortItems.find(item => item.isAsc);
+        mobileSortItem && 
+          dispatch(setSort({...sortParams, mobileTitle: mobileSortItem.mobileTitle, isAsc: true}));
+      } else {
+        const mobileSortItem = mobileSortItems.find(item => !item.isAsc);
+        mobileSortItem &&
+          dispatch(setSort({...sortParams, mobileTitle: mobileSortItem.mobileTitle, isAsc: false}));
+      }
     }
 
     if (isMobile) {

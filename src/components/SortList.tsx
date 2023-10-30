@@ -11,35 +11,62 @@ type SortProps = {
   isAsc: boolean;
 }
 
+export enum SortTitle {
+  price = "по цене",
+  rating = "по рейтингу",
+  name = "по названию",
+  priceAsc = "по возрастанию цены",
+  priceDesc = "по убыванию цены",
+  raingAsc = "по возрастанию рейтинга",
+  ratingDesc = "по убыванию рейтинга",
+  nameAsc = "по названию (от А до Я)",
+  nameDesc = "по названию (от Я до А)"
+}
+
 export const sortList: Sort[] = [
-  {title: "по цене", property: "price"},
-  {title: "по рейтингу", property: "rating"},
-  {title: "по названию", property: "name"},
+  {title: SortTitle.price, property: "price"},
+  {title: SortTitle.rating, property: "rating"},
+  {title: SortTitle.name, property: "name"},
 ];
 
 export const mobileSortList: Sort[] = [
-  {mobileTitle: 'по возрастанию цены', property: 'price', isAsc: true},
-  {mobileTitle: 'по убыванию цены', property: 'price', isAsc: false},
-  {mobileTitle: 'по возрастанию рейтинга', property: 'rating', isAsc: true},
-  {mobileTitle: 'по убыванию рейтинга', property: 'rating', isAsc: false},
-  {mobileTitle: 'по названию (от А до Я)', property: 'name', isAsc: true},
-  {mobileTitle: 'по названию (от Я до А)', property: 'name', isAsc: false},
-]
-
-export const sortMobileTitles = {
-  price: {
-    asc: "по возрастанию цены",
-    desc: "по убыванию цены",
+  {
+    title: SortTitle.price,
+    mobileTitle: SortTitle.priceAsc,
+    property: 'price',
+    isAsc: true,
   },
-  rating: {
-    asc: "по возрастанию рейтинга",
-    desc: "по убыванию рейтинга"
+  {
+    title: SortTitle.price,
+    mobileTitle: SortTitle.priceDesc,
+    property: 'price',
+    isAsc: false,
   },
-  name: {
-    asc: "по названию (от А до Я)",
-    desc: "по названию (от Я до А)"
-  }
-}
+  {
+    title: SortTitle.rating,
+    mobileTitle: SortTitle.raingAsc,
+    property: 'rating',
+    isAsc: true,
+  },
+  {
+    title: SortTitle.rating,
+    mobileTitle: SortTitle.ratingDesc,
+    property: 'rating',
+    isAsc: false,
+  },
+  {
+    title: SortTitle.name,
+    mobileTitle: SortTitle.nameAsc,
+    property: 'name',
+    isAsc: true,
+  },
+  {
+    title: SortTitle.name,
+    mobileTitle: SortTitle.nameDesc,
+    property: 'name',
+    isAsc: false,
+  },
+];
 
 const SortList: FC<SortProps> = ({onChangeSort, isAsc}) => {
 

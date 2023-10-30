@@ -1,29 +1,38 @@
-import React from 'react';
+import React, { FC } from 'react';
 import doogeeImg from '../assets/img/smartphones/DOOGEE-V30.webp';
 import plusSvg from '../assets/img/plus.svg';
 import minusSvg from '../assets/img/minus.svg';
 
-const CartItem = () => {
+type CartItemProps = {
+  id: string;
+  img: string;
+  name: string;
+  price: number;
+  count: number;
+}
+
+const CartItem: FC<CartItemProps> = ( {id, img, name, price, count} ) => {
+
   return (
     <div className="cart-item">
       <div className="cart-item__img">
-        <img src={doogeeImg} alt="" />
+        <img src={img} alt="" />
       </div>
       <div className="cart-item-desq">
-        <div className="smartphone-id">Код товара: 1930354</div>
+        <div className="smartphone-id">Код товара: {id}</div>
         <a href="./../pages/smartphonePage.html" className="cart-item-desq__title">
-          Смартфон DOOGEE V30 8/256Gb, черный
+          {name}
         </a>
       </div>
       <div className="cart-item-price">
         <div className="cart-item-count">
           <img src={minusSvg} alt="" />
-          <input type="number" value="1" />
+          <input type="number" value={count} />
           <img src={plusSvg} alt="" />
         </div>
         <div className="price">
           <p>
-            44 190 <span>₽</span>
+            {price} <span>₽</span>
           </p>
         </div>
       </div>

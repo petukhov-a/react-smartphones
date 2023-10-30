@@ -20,7 +20,7 @@ export interface FilterSetType {
   filterValue: string;
 }
 
-export type SortProperty = 'price' | 'rating' | 'name'
+export type SortProperty = 'price' | 'rating' | 'name';
 
 export type FilterName = 'internalStorage' | 'ram' | 'brand' | 'screenType';
 

@@ -2,8 +2,26 @@ import React, { FC, useEffect } from 'react';
 import smartphoneImg from '../assets/img/smartphones/DOOGEE-V30.webp';
 import { Smartphone } from '../redux/smartphones/types';
 import { Link } from 'react-router-dom';
+import { setCartItem } from '../redux/cart/slice';
+import { useDispatch } from 'react-redux';
 
 const SmartphoneCard: FC<Smartphone> = ( {id, name, img, rating, price, screenType, screenTypeFull, screenSize, screenResolution, processor, ram, internalStorage, networkSupport, fingerprintScanner, dimensions} ) => {
+
+  const dispatch = useDispatch();
+
+  const onClickAddCart = () => {
+    dispatch(
+      setCartItem(
+        {
+          id,
+          img,
+          name,
+          price,
+          count: 1
+        }
+      )
+    )
+  }
 
   return (
     <>
@@ -47,7 +65,7 @@ const SmartphoneCard: FC<Smartphone> = ( {id, name, img, rating, price, screenTy
                 {price} <span>₽</span>
               </p>
             </div>
-            <button className="btn btn-icon">
+            <button className="btn btn-icon" onClick={onClickAddCart}>
               <svg
                 fill="#000000"
                 width="800px"

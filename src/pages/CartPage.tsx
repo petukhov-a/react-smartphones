@@ -1,10 +1,15 @@
-import React from 'react';
-import Header from '../components/Header';
 import CartItem from '../components/CartItem';
 import CartInfo from '../components/CartInfo';
 import { Link } from 'react-router-dom';
+import { selectCart } from '../redux/cart/selectors';
+import { useSelector } from 'react-redux';
 
 const CartPage = () => {
+
+  const { items } = useSelector(selectCart);
+
+  const cartItems = items.map(item => <CartItem {...item} key={item.id}/>)
+
   return (
     <>
       <div className="cart">
@@ -17,9 +22,7 @@ const CartPage = () => {
           </div>
           <div className="cart-wrapper">
             <div className="cart-items">
-              <CartItem />
-              <CartItem />
-              <CartItem />
+              {cartItems}
             </div>
             <CartInfo />
           </div>
