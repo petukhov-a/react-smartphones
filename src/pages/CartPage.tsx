@@ -8,7 +8,7 @@ const CartPage = () => {
 
   const { items } = useSelector(selectCart);
 
-  const cartItems = items.map(item => <CartItem {...item} key={item.id}/>)
+  const cartItems = items.map(item => <CartItem item={item} key={item.id}/>)
 
   return (
     <>

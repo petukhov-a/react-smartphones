@@ -13,6 +13,7 @@ import isEqual from 'lodash.isequal';
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
 import SortList, { mobileSortList, SortTitle } from "../components/SortList";
+import { productsString } from "../utils/formatProductsString";
 
 const MainPage: FC = () => {
 
@@ -201,18 +202,6 @@ const MainPage: FC = () => {
 
   const smartphones = filteredItems.map((item: Smartphone) => <SmartphoneCard {...item} key={item.id} />);
 
-  const productsString = (items: Smartphone[]) => {
-    const lastDigit = Number(items.length) % 10;
-      
-    if (lastDigit === 1) {
-      return 'товар';
-    }
-    if (lastDigit > 1 && lastDigit < 5) {
-      return 'товара';
-    }
-    return 'товаров';
-  }
-
   return (
     <>
       <div className="smartphones">
@@ -221,7 +210,7 @@ const MainPage: FC = () => {
             <div className="smartphones-header-heading">
               <h3 className="smartphones-header__title">Смартфоны</h3>
               <span className="smartphones-header__count">
-                {filteredItems.length + ' ' + productsString(filteredItems)}
+                {filteredItems.length + ' ' + productsString(filteredItems.length)}
               </span>
             </div>
             <button

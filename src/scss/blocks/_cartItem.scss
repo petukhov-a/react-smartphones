@@ -1,6 +1,6 @@
 .cart-item {
     display: grid;
-    grid-template-columns: min-content auto auto min-content;
+    grid-template-columns: min-content 1fr 1fr min-content;
     align-items: center;
     padding: 3rem 0;
     padding-right: 2rem;
@@ -52,6 +52,11 @@
             height: 1.2rem;
             cursor: pointer;
         }
+        
+        .minus:disabled {
+            opacity: 0.4;
+            border-color: #787878;
+        }
 
         input {
             font-size: 1.6rem;
@@ -88,7 +93,7 @@
     .cart-item {
         grid-template-columns: min-content auto auto;
         gap: 1rem;
-        row-gap: 2rem;
+        row-gap: 3rem;
 
         &-price {
             grid-row: -1 span 1;
