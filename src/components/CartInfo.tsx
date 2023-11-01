@@ -3,13 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { clearCart } from '../redux/cart/slice';
 import { selectCart } from '../redux/cart/selectors';
 import { productsString } from '../utils/formatProductsString';
+import { addFavoritesItem } from '../redux/favorites/slice';
 
 const CartInfo = () => {
   const dispatch = useDispatch();
+  const { items } = useSelector(selectCart);
   const { totalCount, totalPrice } = useSelector(selectCart);
 
   const onClickClear = () => {
     dispatch(clearCart());
+  }
+
+  const onClickAddFavoritesAll = () => {
+    items.forEach(item => dispatch(addFavoritesItem(item)));
   }
   
   return (
@@ -27,7 +33,9 @@ const CartInfo = () => {
         </button>
       </div>
       <div className="cart-info-btns">
-        <button className="btn-outline-gray btn-add-favorites">
+        <button
+          className="btn-outline-gray btn-add-favorites"
+          onClick={onClickAddFavoritesAll}>
           <span>Добавить все в избранное</span>
         </button>
         <button className="btn-outline-gray btn-clear-cart" onClick={onClickClear}>
