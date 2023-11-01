@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { removeFavoritesItem } from '../redux/favorites/slice';
+import { addCartItem } from '../redux/cart/slice';
 
 type FavoritesCardProps = {
   name: string;
@@ -23,11 +24,14 @@ const FavoritesCard: FC<FavoritesCardProps> = ( {name, price, img, id} ) => {
             {name}
           </a>
         </div>
-        <div className="favorites-card-footer">
+        <div
+          className="favorites-card-footer"
+          onClick={() => dispatch(addCartItem({name, price, img, id, count: 1}))}>
           <p className="price">
             {price} <span>₽</span>
           </p>
-          <button className="favorites-card__cart-btn">
+          <button
+            className="favorites-card__cart-btn">
             <svg
               fill="#000000"
               width="800px"
