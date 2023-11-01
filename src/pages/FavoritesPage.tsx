@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectCart } from '../redux/cart/selectors';
 import { selectFavorites } from '../redux/favorites/selectors';
 import { clearFavorites } from '../redux/favorites/slice';
+import { addCartItem } from '../redux/cart/slice';
+import { Link } from 'react-router-dom';
 
 const FavoritesPage = () => {
   const { items } = useSelector(selectFavorites);
@@ -12,29 +14,37 @@ const FavoritesPage = () => {
   const favorites = items.map(item => <FavoritesCard {...item} key={item.id}/>)
   const dispatch = useDispatch();
 
+  const onClickAddCartAll = () => {
+    items.forEach(item => dispatch(addCartItem(item)));
+  }
+
   return (
     <div className="favorites">
       <div className="container">
         <h1 className="favorites__heading">Избранное</h1>
         <div className="favorites-content">
           <div className="favorites-content-btns">
-            <button className="btn-outline btn-icon">
-              <svg
-                fill="#000000"
-                width="800px"
-                height="800px"
-                viewBox="0 0 24 24"
-                data-name="Layer 1"
-                id="Layer_1"
-                xmlns="http://www.w3.org/2000/svg">
-                <title />
-                <path
-                  fill="#fff"
-                  d="M12.2,9h1.6V6.8H16V5.2H13.8V3H12.2V5.2H10V6.8h2.2ZM20,5v5.5L7.45,12.72,5,3H1.25a1,1,0,0,0,0,2H3.47L6.7,18H20V16H8.26l-.33-1.33L22,12.18V5ZM7,19a1.5,1.5,0,1,0,1.5,1.5A1.5,1.5,0,0,0,7,19Zm12,0a1.5,1.5,0,1,0,1.5,1.5A1.5,1.5,0,0,0,19,19Z"
-                />
-              </svg>
-              <span>Купить все товары</span>
-            </button>
+            <Link to='/cart'>
+              <button
+                className="btn-outline btn-icon"
+                onClick={onClickAddCartAll}>
+                <svg
+                  fill="#000000"
+                  width="800px"
+                  height="800px"
+                  viewBox="0 0 24 24"
+                  data-name="Layer 1"
+                  id="Layer_1"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <title />
+                  <path
+                    fill="#fff"
+                    d="M12.2,9h1.6V6.8H16V5.2H13.8V3H12.2V5.2H10V6.8h2.2ZM20,5v5.5L7.45,12.72,5,3H1.25a1,1,0,0,0,0,2H3.47L6.7,18H20V16H8.26l-.33-1.33L22,12.18V5ZM7,19a1.5,1.5,0,1,0,1.5,1.5A1.5,1.5,0,0,0,7,19Zm12,0a1.5,1.5,0,1,0,1.5,1.5A1.5,1.5,0,0,0,19,19Z"
+                  />
+                </svg>
+                <span>Купить все товары</span>
+              </button>
+            </Link>
             <button
               className="btn-outline-gray btn-icon"
               onClick={() => dispatch(clearFavorites())}>

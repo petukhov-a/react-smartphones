@@ -1,3 +1,4 @@
 type FavoritesSliceState = {
-    items: CartItem[]
+    items: CartItem[];
+    totalCount: number;
 }

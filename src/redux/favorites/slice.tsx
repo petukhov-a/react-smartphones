@@ -1,8 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { calcTotalCount } from '../../utils/calcTotalCount';
 
 const initialState: FavoritesSliceState = {
   items: [],
+  totalCount: 0
 };
 
 export const favoritesSlice = createSlice({
@@ -15,12 +17,18 @@ export const favoritesSlice = createSlice({
       if (!currentItem) {
         state.items.push(action.payload);
       }
+
+      state.totalCount = calcTotalCount(state.items);
     },
     removeFavoritesItem(state, action: PayloadAction<string>) {
       state.items = state.items.filter(item => item.id !== action.payload);
+
+      state.totalCount = calcTotalCount(state.items);
     },
     clearFavorites(state) {
         state.items = [];
+
+        state.totalCount = calcTotalCount(state.items);
     }
   },
 });
