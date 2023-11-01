@@ -1,21 +1,31 @@
-import React from 'react';
-import doogeeImg from '../assets/img/smartphones/DOOGEE-V30.webp';
+import React, { FC } from 'react';
+import { useDispatch } from 'react-redux';
+import { removeFavoritesItem } from '../redux/favorites/slice';
 
-const FavoritesCard = () => {
+type FavoritesCardProps = {
+  name: string;
+  price: number;
+  img: string;
+  id: string;
+}
+
+const FavoritesCard: FC<FavoritesCardProps> = ( {name, price, img, id} ) => {
+  const dispatch = useDispatch();
+
   return (
     <div className="card-container card-hover">
       <div className="favorites-card">
         <div className="favorites-card-header">
           <div className="favorites-card__img">
-            <img src={doogeeImg} alt="" />
+            <img src={img} alt="" />
           </div>
           <a href="./../pages/smartphonePage.html" className="favorites-card__name">
-            Смартфон DOOGEE V30 8/256Gb, черный
+            {name}
           </a>
         </div>
         <div className="favorites-card-footer">
           <p className="price">
-            44 190 <span>₽</span>
+            {price} <span>₽</span>
           </p>
           <button className="favorites-card__cart-btn">
             <svg
@@ -34,7 +44,9 @@ const FavoritesCard = () => {
             </svg>
           </button>
         </div>
-        <button className="favorites-card__remove-btn">
+        <button
+          className="favorites-card__remove-btn"
+          onClick={() => dispatch(removeFavoritesItem(id))}>
           <svg
             width="800px"
             height="800px"

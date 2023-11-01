@@ -1,0 +1,3 @@
+type FavoritesSliceState = {
+    items: CartItem[]
+}

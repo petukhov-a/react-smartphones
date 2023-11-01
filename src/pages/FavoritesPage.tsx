@@ -1,8 +1,17 @@
 import React from 'react';
 import Sort from '../components/SortList';
 import FavoritesCard from '../components/FavoritesCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCart } from '../redux/cart/selectors';
+import { selectFavorites } from '../redux/favorites/selectors';
+import { clearFavorites } from '../redux/favorites/slice';
 
 const FavoritesPage = () => {
+  const { items } = useSelector(selectFavorites);
+
+  const favorites = items.map(item => <FavoritesCard {...item} key={item.id}/>)
+  const dispatch = useDispatch();
+
   return (
     <div className="favorites">
       <div className="container">
@@ -26,7 +35,9 @@ const FavoritesPage = () => {
               </svg>
               <span>Купить все товары</span>
             </button>
-            <button className="btn-outline-gray btn-icon">
+            <button
+              className="btn-outline-gray btn-icon"
+              onClick={() => dispatch(clearFavorites())}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 128 128"
@@ -40,10 +51,7 @@ const FavoritesPage = () => {
           <div className="favorites-content-main">
             {/* <Sort /> */}
             <div className="favorites-cards">
-                <FavoritesCard />
-                <FavoritesCard />
-                <FavoritesCard />
-                <FavoritesCard />
+                {favorites}
             </div>
           </div>
         </div>
