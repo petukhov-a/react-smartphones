@@ -43,30 +43,6 @@
         gap: 5rem;
     }
 
-    &-count {
-        display: flex;
-        align-items: center;
-
-        img {
-            width: 1.2rem;
-            height: 1.2rem;
-            cursor: pointer;
-        }
-        
-        .minus:disabled {
-            opacity: 0.4;
-            border-color: #787878;
-        }
-
-        input {
-            font-size: 1.6rem;
-            width: 2.4rem;
-            margin: 0 0.8rem;
-            text-align: center;
-            border-bottom: 0.1rem solid rgb(179, 179, 183);
-        }
-    }
-
     &-icons {
         width: 6rem;
         height: 2rem;

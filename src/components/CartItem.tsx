@@ -1,36 +1,20 @@
-import React, { ChangeEvent, FC, useDebugValue } from 'react';
-import doogeeImg from '../assets/img/smartphones/DOOGEE-V30.webp';
-import plusSvg from '../assets/img/plus.svg';
-import minusSvg from '../assets/img/minus.svg';
+import { FC } from 'react';
 import { useDispatch } from 'react-redux';
-import { addCartItem, minusCartItem, removeCartItem, setCount } from '../redux/cart/slice';
+import { removeCartItem } from '../redux/cart/slice';
+import CountInput from './CartInput';
 
 type CartItemProps = {
   item: CartItem;
-}
+};
 
-const CartItem: FC<CartItemProps> = ( { item } ) => {
-  const {id, img, name, price, count} = item;
+const CartItem: FC<CartItemProps> = ({ item }) => {
+  const { id, img, name, price } = item;
 
   const dispatch = useDispatch();
 
   const onClickRemove = () => {
-    dispatch(removeCartItem(id))
-  }
-
-  const oncClickInc = () => {
-    dispatch(addCartItem(item));
-  }
-
-  const onClickDec = () => {
-    dispatch(minusCartItem(id));
-  }
-
-  const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
-    const count = Number(e.target.value);
-
-    dispatch(setCount( {count, id}))
-  }
+    dispatch(removeCartItem(id));
+  };
 
   return (
     <div className="cart-item">
@@ -44,19 +28,7 @@ const CartItem: FC<CartItemProps> = ( { item } ) => {
         </a>
       </div>
       <div className="cart-item-price">
-        <div className="cart-item-count">
-          <button className="minus"
-            onClick={onClickDec}
-            disabled={count === 1}>
-            <img className='minus' src={minusSvg} alt="" />
-          </button>
-          <input type="number"
-            value={count}
-            onChange={onChangeInput} />
-          <button className="plus" onClick={oncClickInc}>
-            <img className='plus' src={plusSvg} alt="" />
-          </button>
-        </div>
+        <CountInput cartItem={item} isRemoveOnMinus={false} />
         <div className="price">
           <p>
             {price} <span>₽</span>
@@ -84,6 +56,6 @@ const CartItem: FC<CartItemProps> = ( { item } ) => {
       </div>
     </div>
   );
-}
+};
 
-export default CartItem
+export default CartItem;

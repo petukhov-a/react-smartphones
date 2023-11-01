@@ -4,7 +4,7 @@
 
     &-wrapper {
         display: grid;
-        grid-template-columns: 22rem auto 20rem;
+        grid-template-columns: 22rem auto 25rem;
         gap: 5rem;
         align-items: center;
         position: relative;
@@ -50,6 +50,11 @@
         align-items: flex-end;
         flex-direction: column;
         gap: 2rem;
+
+        &-action {
+            display: flex;
+            gap: 1rem;
+        }
     }
 
     &__add-favorites {
