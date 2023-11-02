@@ -9,9 +9,12 @@
     &__img {
         width: 8rem;
         height: 8rem;
+        display: flex;
+        justify-content: center;
 
         img {
-            object-fit: fill;
+            max-height: 8rem;
+            object-fit: contain;
             object-position: center center;
         }
     }

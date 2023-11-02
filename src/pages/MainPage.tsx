@@ -1,7 +1,7 @@
 import { FC, useEffect, useRef, useState } from "react";
 import SmartphoneCard from "../components/SmartphoneCard";
 import Filter from "../components/Filter";
-import { FilterName, Sort } from "../redux/filter/types";
+import { FilterName, Sort, SortProperty } from "../redux/filter/types";
 import { selectFilter } from "../redux/filter/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { selectSmartphones } from "../redux/smartphones/selectors";
@@ -18,7 +18,7 @@ import { productsString } from "../utils/formatProductsString";
 const MainPage: FC = () => {
 
   const [isShowFilter, setIsShowFilter] = useState(false);
-  const [isAsc, setIsAsc] = useState(false);
+  // const [isAsc, setIsAsc] = useState(false);
   const [filteredItems, setFilteredItems] = useState<Smartphone[]>([]);
   const { sort } = useSelector(selectFilter);
   const filterBtnRef = useRef<HTMLButtonElement>(null);
@@ -29,12 +29,10 @@ const MainPage: FC = () => {
   const navigate = useNavigate();
 
   const filterValues = useSelector(selectFilter);
-  const order = isAsc ? 'asc' : 'desc';
-  // const [order, setOrder] = useState(isAsc ? 'asc' : 'desc');
   const { items } = useSelector(selectSmartphones);
   const prevFiltersRef = useRef<FilterSliceState>();
 
-  const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?sortBy=${sort.property}&order=${order}`;
+  const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?`;
 
   const fetchItems = (url: string) => {
     fetch(url)
@@ -55,7 +53,7 @@ const MainPage: FC = () => {
 
   useEffect(() => {
     fetchItems(url);
-  }, [sort, order]);
+  }, []);
 
 
   useEffect(() => {
@@ -92,36 +90,6 @@ const MainPage: FC = () => {
       dispatch(setFilters(filters));
     }
   }, []);
-
-  const onChangeSort = (sortParams: Sort, isMobile: boolean, index: number) => {
-    if (!isMobile) {
-
-      if (sort.property !== sortParams.property) {
-        setIsAsc(false);
-      } else {
-        setIsAsc(isAsc => !isAsc);
-      }
-
-      const mobileSortItems = mobileSortList.filter(item => 
-        item.property === sortParams.property
-      );
-
-      if (!isAsc) {
-        const mobileSortItem = mobileSortItems.find(item => item.isAsc);
-        mobileSortItem && 
-          dispatch(setSort({...sortParams, mobileTitle: mobileSortItem.mobileTitle, isAsc: true}));
-      } else {
-        const mobileSortItem = mobileSortItems.find(item => !item.isAsc);
-        mobileSortItem &&
-          dispatch(setSort({...sortParams, mobileTitle: mobileSortItem.mobileTitle, isAsc: false}));
-      }
-    }
-
-    if (isMobile) {
-      setIsAsc(sortParams.isAsc ? true : false);
-      dispatch(setSort(sortParams));
-    }
-  }
 
   const isFilterCheckboxExist = (filterName: FilterName | 'prices') => {
     if (filterName !== 'prices') {
@@ -187,10 +155,25 @@ const MainPage: FC = () => {
     return false;
   }
 
+  const sortItems = (items: Smartphone[], isAsc: boolean | undefined, property: SortProperty) => {
+    return items.sort((a, b) => {
+      const k = isAsc ? 1 : -1;
+
+        if (a[property] < b[property]) {
+          return -1 * k;
+        }
+        if (a[property] > b[property]) {
+          return 1 * k;
+        }
+        return 0;
+    });
+  }
+
   useEffect(() => {
     if (!isEqual(filterValues, prevFiltersRef)) {
       const newItems = items.filter(item => isMatchFilters(item));
 
+      sortItems(newItems, filterValues.sort.isAsc, sort.property);
       setFilteredItems(newItems);
   
       if (filterValues.prices.toString() === `0,0`) {
@@ -198,6 +181,7 @@ const MainPage: FC = () => {
       }
     }
     prevFiltersRef.current = filterValues;
+
   }, [filterValues, items]);
 
   const smartphones = filteredItems.map((item: Smartphone) => <SmartphoneCard {...item} key={item.id} />);
@@ -220,7 +204,7 @@ const MainPage: FC = () => {
               Фильтры
             </button>
           </div>
-          <SortList onChangeSort={onChangeSort} isAsc={isAsc} />
+          <SortList />
           <div className="smartphones-content">
             <div className="smartphones-content-cards">{smartphones}</div>
             <Filter isShow={isShowFilter} setIsShow={setIsShowFilter} filterBtnRef={filterBtnRef} />

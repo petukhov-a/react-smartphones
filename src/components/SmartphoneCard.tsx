@@ -30,24 +30,13 @@ const SmartphoneCard: FC<Smartphone> = ({
 
   const dispatch = useDispatch();
   const { items: cartItems } = useSelector(selectCart);
-  const { items: favoritesItems } = useSelector(selectFavorites);
-
   const currentCartItem = cartItems.find((item) => item.id === id);
-  const currentFavoritesItem = favoritesItems.find((item) => item.id === id);
-
 
   const onClickAddCart = () => {
     if (!currentCartItem) {
       dispatch(addCartItem({ id, img, price, name, count: 1 }));
     }
   };
-
-  const onClickAddFavorites = () => {
-    dispatch(addFavoritesItem({ id, img, price, name, count: 1 }));
-    if (currentFavoritesItem?.id === id) {
-      dispatch(removeFavoritesItem(id));
-    }
-  }
 
   const onClickLink = (e: MouseEvent<HTMLAnchorElement>) => {
     if (!currentCartItem) {

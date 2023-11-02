@@ -12,7 +12,7 @@ export interface Sort {
   property: SortProperty,
   title?: string,
   mobileTitle?: string,
-  isAsc?: boolean,
+  isAsc: boolean,
 }
 
 export interface FilterSetType {

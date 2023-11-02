@@ -15,7 +15,7 @@ const CartInfo = () => {
   }
 
   const onClickAddFavoritesAll = () => {
-    items.forEach(item => dispatch(addFavoritesItem(item)));
+    items.forEach(item => dispatch(addFavoritesItem({...item, count: 1})));
   }
   
   return (

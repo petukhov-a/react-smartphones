@@ -1,5 +1,4 @@
 import React from 'react';
-import Sort from '../components/SortList';
 import FavoritesCard from '../components/FavoritesCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCart } from '../redux/cart/selectors';
@@ -7,6 +6,7 @@ import { selectFavorites } from '../redux/favorites/selectors';
 import { clearFavorites } from '../redux/favorites/slice';
 import { addCartItem } from '../redux/cart/slice';
 import { Link } from 'react-router-dom';
+import Sort from '../components/SortList';
 
 const FavoritesPage = () => {
   const { items } = useSelector(selectFavorites);
