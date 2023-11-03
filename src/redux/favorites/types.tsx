@@ -1,4 +1,4 @@
-type FavoritesSliceState = {
+export type FavoritesSliceState = {
     items: CartItem[];
     totalCount: number;
 }

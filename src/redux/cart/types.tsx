@@ -10,4 +10,5 @@ type CartItem = {
     name: string;
     price: number;
     count: number;
+    rating: number;
 }

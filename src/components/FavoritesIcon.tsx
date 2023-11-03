@@ -8,7 +8,7 @@ type FavoritesIconProps = {
 }
 
 const FavoritesIcon: FC<FavoritesIconProps> = ( {item} ) => {
-  const {id, img, price, name, count} = item;
+  const {id, img, price, name, rating} = item;
 
   const { items: favoritesItems } = useSelector(selectFavorites);
   const currentFavoritesItem = favoritesItems.find((item) => item.id === id);
@@ -16,7 +16,7 @@ const FavoritesIcon: FC<FavoritesIconProps> = ( {item} ) => {
   const dispatch = useDispatch();
 
   const onClickAddFavorites = () => {
-    dispatch(addFavoritesItem({ id, img, price, name, count }));
+    dispatch(addFavoritesItem({ id, img, price, name, rating, count: 1 }));
     if (currentFavoritesItem?.id === id) {
       dispatch(removeFavoritesItem(id));
     }

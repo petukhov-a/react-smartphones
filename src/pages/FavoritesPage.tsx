@@ -1,22 +1,50 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import FavoritesCard from '../components/FavoritesCard';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCart } from '../redux/cart/selectors';
 import { selectFavorites } from '../redux/favorites/selectors';
 import { clearFavorites } from '../redux/favorites/slice';
 import { addCartItem } from '../redux/cart/slice';
 import { Link } from 'react-router-dom';
-import Sort from '../components/SortList';
+import { selectFilter } from '../redux/filter/selectors';
+import { Sort } from '../redux/filter/types';
+import { sortItems } from '../utils/sortItems';
+import SortList from '../components/SortList';
+import { setFavoritesSort } from '../redux/filter/slice';
+
+const sortList: Sort[] = [
+  { title: 'по цене', property: 'price', isAsc: false },
+  { title: 'по рейтингу', property: 'rating', isAsc: false },
+  { title: 'по названию', property: 'name', isAsc: false },
+];
+
+const mobileSortList: Sort[] = [
+  { mobileTitle: 'по возрастанию цены', property: 'price', isAsc: true },
+  { mobileTitle: 'по убыванию цены', property: 'price', isAsc: false },
+  { mobileTitle: 'по возрастанию рейтинга', property: 'rating', isAsc: true },
+  { mobileTitle: 'по убыванию рейтинга', property: 'rating', isAsc: false },
+  { mobileTitle: 'по названию (от А до Я)', property: 'name', isAsc: true },
+  { mobileTitle: 'по названию (от Я до А)', property: 'name', isAsc: false },
+];
 
 const FavoritesPage = () => {
   const { items } = useSelector(selectFavorites);
+  const [sortedItems, setSortedItems] = useState<CartItem[]>([]);
+  const { favoritesSort } = useSelector(selectFilter);
 
-  const favorites = items.map(item => <FavoritesCard {...item} key={item.id}/>)
+  useEffect(() => {
+    const newItems = structuredClone(items);
+
+    sortItems(newItems, favoritesSort.isAsc, favoritesSort.property);
+    setSortedItems(newItems);
+
+  }, [favoritesSort]);
+
+  const favorites = sortedItems.map((item) => <FavoritesCard item={item} key={item.id} />);
   const dispatch = useDispatch();
 
   const onClickAddCartAll = () => {
-    items.forEach(item => dispatch(addCartItem(item)));
-  }
+    items.forEach((item) => dispatch(addCartItem(item)));
+  };
 
   return (
     <div className="favorites">
@@ -24,10 +52,8 @@ const FavoritesPage = () => {
         <h1 className="favorites__heading">Избранное</h1>
         <div className="favorites-content">
           <div className="favorites-content-btns">
-            <Link to='/cart'>
-              <button
-                className="btn-outline btn-icon"
-                onClick={onClickAddCartAll}>
+            <Link to="/cart">
+              <button className="btn-outline btn-icon" onClick={onClickAddCartAll}>
                 <svg
                   fill="#000000"
                   width="800px"
@@ -59,9 +85,14 @@ const FavoritesPage = () => {
             </button>
           </div>
           <div className="favorites-content-main">
-            {/* <Sort /> */}
+            <SortList
+              sortList={sortList}
+              mobileSortList={mobileSortList}
+              sortData={favoritesSort}
+              setSort={setFavoritesSort}
+            />
             <div className="favorites-cards">
-                {favorites}
+              {favorites}
             </div>
           </div>
         </div>

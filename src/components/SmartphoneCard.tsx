@@ -34,7 +34,7 @@ const SmartphoneCard: FC<Smartphone> = ({
 
   const onClickAddCart = () => {
     if (!currentCartItem) {
-      dispatch(addCartItem({ id, img, price, name, count: 1 }));
+      dispatch(addCartItem({ id, img, price, name, rating, count: 1 }));
     }
   };
 
@@ -116,7 +116,7 @@ const SmartphoneCard: FC<Smartphone> = ({
             </div>
           </div>
           <div className="smartphone-card__add-favorites">
-            <FavoritesIcon item={ {id, img, price, name, count: 1} }/>
+            <FavoritesIcon item={ {id, img, price, name, rating, count: 1} }/>
           </div>
         </div>
       </div>

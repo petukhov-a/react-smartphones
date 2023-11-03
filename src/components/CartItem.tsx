@@ -11,7 +11,7 @@ type CartItemProps = {
 };
 
 const CartItem: FC<CartItemProps> = ({ item }) => {
-  const { id, img, name, price } = item;
+  const { id, img, name, price, rating } = item;
 
   const dispatch = useDispatch();
 
@@ -40,7 +40,7 @@ const CartItem: FC<CartItemProps> = ({ item }) => {
       </div>
       <div className="cart-item-icons">
         <div className="fav-icon">
-          <FavoritesIcon item={ {id, img, price, name, count: 1} }/>
+          <FavoritesIcon item={ {id, img, price, name, rating, count: 1} }/>
         </div>
         <div onClick={onClickRemove}>
           <svg 

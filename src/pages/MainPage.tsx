@@ -1,32 +1,48 @@
 import { FC, useEffect, useRef, useState } from "react";
 import SmartphoneCard from "../components/SmartphoneCard";
 import Filter from "../components/Filter";
-import { FilterName, Sort, SortProperty } from "../redux/filter/types";
+import { FilterName, Sort } from "../redux/filter/types";
 import { selectFilter } from "../redux/filter/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { selectSmartphones } from "../redux/smartphones/selectors";
 import { setSmartphones } from "../redux/smartphones/slice";
 import { Smartphone } from "../redux/smartphones/types";
 import { FilterSliceState } from "../redux/filter/types";
-import { setFilters, setPriceFilterValue, setSort } from "../redux/filter/slice";
+import { setFilters, setPriceFilterValue } from "../redux/filter/slice";
 import isEqual from 'lodash.isequal';
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
-import SortList, { mobileSortList, SortTitle } from "../components/SortList";
+import SortList from "../components/SortList";
 import { productsString } from "../utils/formatProductsString";
+import { sortItems } from "../utils/sortItems";
+import { setMainSort } from "../redux/filter/slice";
+
+const sortList: Sort[] = [
+  {title: "по цене", property: "price", isAsc: false},
+  {title: "по рейтингу", property: "rating", isAsc: false},
+  {title: "по названию", property: "name", isAsc: false},
+];
+
+const mobileSortList: Sort[] = [
+  {mobileTitle: "по возрастанию цены", property: 'price', isAsc: true},
+  {mobileTitle: "по убыванию цены", property: 'price',isAsc: false},
+  {mobileTitle: "по возрастанию рейтинга", property: 'rating',isAsc: true},
+  {mobileTitle: "по убыванию рейтинга", property: 'rating',isAsc: false},
+  {mobileTitle: "по названию (от А до Я)", property: 'name',isAsc: true},
+  {mobileTitle: "по названию (от Я до А)", property: 'name',isAsc: false},
+];
 
 const MainPage: FC = () => {
 
   const [isShowFilter, setIsShowFilter] = useState(false);
-  // const [isAsc, setIsAsc] = useState(false);
   const [filteredItems, setFilteredItems] = useState<Smartphone[]>([]);
-  const { sort } = useSelector(selectFilter);
   const filterBtnRef = useRef<HTMLButtonElement>(null);
   const [clazz, setClazz] = useState('');
   const isMountedNavigate = useRef(false);
   const isMountedMobileFilter = useRef(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { mainSort } = useSelector(selectFilter);
 
   const filterValues = useSelector(selectFilter);
   const { items } = useSelector(selectSmartphones);
@@ -155,25 +171,11 @@ const MainPage: FC = () => {
     return false;
   }
 
-  const sortItems = (items: Smartphone[], isAsc: boolean | undefined, property: SortProperty) => {
-    return items.sort((a, b) => {
-      const k = isAsc ? 1 : -1;
-
-        if (a[property] < b[property]) {
-          return -1 * k;
-        }
-        if (a[property] > b[property]) {
-          return 1 * k;
-        }
-        return 0;
-    });
-  }
-
   useEffect(() => {
     if (!isEqual(filterValues, prevFiltersRef)) {
       const newItems = items.filter(item => isMatchFilters(item));
 
-      sortItems(newItems, filterValues.sort.isAsc, sort.property);
+      sortItems(newItems, filterValues.mainSort.isAsc, mainSort.property);
       setFilteredItems(newItems);
   
       if (filterValues.prices.toString() === `0,0`) {
@@ -204,7 +206,11 @@ const MainPage: FC = () => {
               Фильтры
             </button>
           </div>
-          <SortList />
+          <SortList
+            sortList={sortList}
+            mobileSortList={mobileSortList}
+            sortData={mainSort}
+            setSort={setMainSort}/>
           <div className="smartphones-content">
             <div className="smartphones-content-cards">{smartphones}</div>
             <Filter isShow={isShowFilter} setIsShow={setIsShowFilter} filterBtnRef={filterBtnRef} />

@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { calcTotalCount } from '../../utils/calcTotalCount';
+import { FavoritesSliceState } from './types';
 
 const initialState: FavoritesSliceState = {
   items: [],
