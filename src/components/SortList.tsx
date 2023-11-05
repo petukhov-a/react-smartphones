@@ -19,7 +19,6 @@ const SortList: FC<SortListProps> = ( {sortList, mobileSortList, sortData, setSo
   const [isAsc, setIsAsc] = useState(false);
   const dispatch = useDispatch();
 
-  const { mainSort } = useSelector(selectFilter); 
   const [currentSort, setCurrentSort] = useState<Sort>(sortData);
   const sortListMobileRef = useRef<HTMLDivElement>(null);
   const [isShow, setIsShow] = useState(false);

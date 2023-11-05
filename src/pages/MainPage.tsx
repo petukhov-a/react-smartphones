@@ -186,7 +186,7 @@ const MainPage: FC = () => {
 
   }, [filterValues, items]);
 
-  const smartphones = filteredItems.map((item: Smartphone) => <SmartphoneCard {...item} key={item.id} />);
+  const smartphones = filteredItems.map((item: Smartphone) => <SmartphoneCard item={item} key={item.id} />);
 
   return (
     <>

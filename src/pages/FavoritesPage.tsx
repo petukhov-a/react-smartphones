@@ -37,7 +37,7 @@ const FavoritesPage = () => {
     sortItems(newItems, favoritesSort.isAsc, favoritesSort.property);
     setSortedItems(newItems);
 
-  }, [favoritesSort]);
+  }, [favoritesSort, items]);
 
   const favorites = sortedItems.map((item) => <FavoritesCard item={item} key={item.id} />);
   const dispatch = useDispatch();

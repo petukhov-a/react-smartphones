@@ -9,27 +9,39 @@ import CountInput from './CartInput';
 import { addFavoritesItem, removeFavoritesItem } from '../redux/favorites/slice';
 import { selectFavorites } from '../redux/favorites/selectors';
 import FavoritesIcon from './FavoritesIcon';
+import SmartphoneSpecs from './SmartphoneSpecs';
 
-const SmartphoneCard: FC<Smartphone> = ({
-  id,
-  name,
-  img,
-  rating,
-  price,
-  screenType,
-  screenTypeFull,
-  screenSize,
-  screenResolution,
-  processor,
-  ram,
-  internalStorage,
-  networkSupport,
-  fingerprintScanner,
-  dimensions,
-}) => {
+// id,
+// name,
+// img,
+// rating,
+// price,
+// screenType,
+// screenTypeFull,
+// screenSize,
+// screenResolution,
+// processor,
+// ram,
+// internalStorage,
+// networkSupport,
+// fingerprintScanner,
+// dimensions,
+
+type SmartphoneCardProps = {
+  item: Smartphone;
+}
+
+const SmartphoneCard: FC<SmartphoneCardProps> = ( {item} ) => {
 
   const dispatch = useDispatch();
   const { items: cartItems } = useSelector(selectCart);
+  const {
+    id,
+    name,
+    img,
+    rating,
+    price
+  } = item;
   const currentCartItem = cartItems.find((item) => item.id === id);
 
   const onClickAddCart = () => {
@@ -48,42 +60,18 @@ const SmartphoneCard: FC<Smartphone> = ({
     <>
       <div className="smartphone-card card-hover">
         <div className="smartphone-card-wrapper">
-          <Link to="/smartphone" className="smartphone-card__img">
+          <Link to={`/smartphone/${id}`} className="smartphone-card__img">
             <img src={img} alt="" />
           </Link>
           <div className="smartphone-card-desq">
             <div className="smartphone-card-heading">
-              <Link to="/smartphone" className="smartphone-name">
+              <Link to={`/smartphone/${id}`} className="smartphone-name">
                 {name}
               </Link>
               <p className="smartphone-id">Код товара: {id}</p>
             </div>
             <div className="separator"></div>
-            <ul className="smartphone-card-specs">
-              <li>
-                <span>Экран&nbsp;</span>
-                {screenTypeFull}, {screenSize}" ({screenResolution});
-              </li>
-              <li>
-                <span>Процессор&nbsp;</span>
-                {processor};
-              </li>
-              <li>
-                <span>Память&nbsp;</span>оперативная {ram} ГБ, встроенная {internalStorage} ГБ;
-              </li>
-              <li>
-                <span>Поддержка сетей&nbsp;</span>
-                {networkSupport};
-              </li>
-              <li>
-                <span>Сканер отпечатка пальцев&nbsp;</span>
-                {fingerprintScanner};
-              </li>
-              <li>
-                <span>Размеры (ШхВхТ)&nbsp;</span>
-                {dimensions.width} х {dimensions.height} х {dimensions.thickness} мм;
-              </li>
-            </ul>
+            <SmartphoneSpecs item={item}/>
           </div>
           <div className="smartphone-card-add-cart">
             <div className="price">

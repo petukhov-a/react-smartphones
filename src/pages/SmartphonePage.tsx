@@ -1,46 +1,56 @@
-import React from 'react';
 import doogeeImg from '../assets/img/smartphones/DOOGEE-V30.webp';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectSmartphones } from '../redux/smartphones/selectors';
+import { useParams } from 'react-router-dom';
+import SmartphoneSpecs from '../components/SmartphoneSpecs';
+import { addCartItem } from '../redux/cart/slice';
 
 const SmartphonePage = () => {
+  const { items } = useSelector(selectSmartphones);
+  const {id} = useParams();
+  const currentSmartphone = items.find(item => item.id === id);
+  const dispatch = useDispatch();
+
+
+  const onClickAddCart = () => {
+    if (currentSmartphone) {
+      dispatch(addCartItem({
+        id: currentSmartphone.id,
+        name: currentSmartphone.name,
+        price: currentSmartphone.price,
+        img: currentSmartphone.img,
+        rating: currentSmartphone.rating,
+        count: 1
+      }));
+    }
+  }
+
+  if (!currentSmartphone) {
+    return '...загрузка'
+  }
+
   return (
     <div className="smartphone-page">
       <div className="container">
         <div className="smartphone-page-heading">
-          <div className="smartphone-name no-hover">Смартфон DOOGEE V30 8/256Gb, черный</div>
-          <div className="smartphone-id">Код товара: 1968430</div>
+          <div className="smartphone-name no-hover">Смартфон {currentSmartphone.name}</div>
+          <div className="smartphone-id">Код товара: {currentSmartphone.id}</div>
         </div>
         <div className="smartphone-page-info">
-          <img className="smartphone-page__img" src={doogeeImg} alt="" />
+          <img className="smartphone-page__img" src={currentSmartphone.img} alt="" />
           <div className="smartphone-page-desq">
             <p className="smartphone-page-desq__color">
               Цвет: <span>черный</span>
             </p>
-            <ul className="smartphone-page-desq-specs">
-              <li>
-                <span>Экран&nbsp;</span>IPS FHD+, 6.58" (2408x1080),
-              </li>
-              <li>
-                <span>Процессор&nbsp;</span>MediaTek Dimensity 900;
-              </li>
-              <li>
-                <span>Память&nbsp;</span>оперативная 8 ГБ, встроенная 256 ГБ,
-              </li>
-              <li>
-                <span>Поддержка сетей&nbsp;</span>2G/3G/4G (LTE)/5G;
-              </li>
-              <li>
-                <span>Сканер отпечатка пальцев&nbsp;</span>сбоку;
-              </li>
-              <li>
-                <span>Размеры (ШхВхТ)&nbsp;</span>83.1 х 178.4 х 18.3 мм;
-              </li>
-            </ul>
+            <SmartphoneSpecs item={currentSmartphone} />
           </div>
           <div className="smartphone-page-actions">
             <div className="price">
-              44 190 <span>₽</span>
+              {currentSmartphone.price} <span>₽</span>
             </div>
-            <button className="smartphone-page-actions__add-cart-btn btn btn-icon">
+            <button
+              className="smartphone-page-actions__add-cart-btn btn btn-icon"
+              onClick={onClickAddCart}>
               <svg
                 fill="#000000"
                 width="800px"

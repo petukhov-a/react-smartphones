@@ -13,7 +13,7 @@ function App() {
         <Route path="" element={<MainPage />}/>
         <Route path="cart" element={<CartPage />} />
         <Route path="favorites" element={<FavoritesPage />} />
-        <Route path="smartphone" element={<SmartphonePage />}/>
+        <Route path="smartphone/:id" element={<SmartphonePage />}/>
         </Route>
     </Routes>
   );
