@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 import Nav from './Nav';
 import Search from './Search';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectCart } from '../redux/cart/selectors';
 
 const Header = () => {
+  const { items } = useSelector(selectCart);
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      const json = JSON.stringify(items);
+      localStorage.setItem('cart', json);
+    }
+    isMounted.current = true;
+  }, [items]);
+
   return (
     <header className="header">
       <div className="container">

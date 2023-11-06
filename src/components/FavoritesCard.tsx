@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { removeFavoritesItem } from '../redux/favorites/slice';
 import { addCartItem } from '../redux/cart/slice';
+import { Link } from 'react-router-dom';
 
 type FavoritesCardProps = {
   item: CartItem;
@@ -14,14 +15,16 @@ const FavoritesCard: FC<FavoritesCardProps> = ( {item} ) => {
   return (
     <div className="card-container card-hover">
       <div className="favorites-card">
-        <div className="favorites-card-header">
-          <div className="favorites-card__img">
-            <img src={img} alt="" />
+        <Link to={`/smartphone/${id}`} className="favorites-card__name">
+          <div className="favorites-card-header">
+            <div className="favorites-card__img">
+              <img src={img} alt="" />
+            </div>
+            <p className="favorites-card__name">
+              {name}
+            </p>
           </div>
-          <a href="./../pages/smartphonePage.html" className="favorites-card__name">
-            {name}
-          </a>
-        </div>
+        </Link>
         <div
           className="favorites-card-footer"
           onClick={() => dispatch(addCartItem({name, price, img, id, rating, count: 1}))}>

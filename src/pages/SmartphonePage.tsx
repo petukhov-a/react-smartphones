@@ -1,43 +1,44 @@
-import doogeeImg from '../assets/img/smartphones/DOOGEE-V30.webp';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectSmartphones } from '../redux/smartphones/selectors';
 import { useParams } from 'react-router-dom';
 import SmartphoneSpecs from '../components/SmartphoneSpecs';
-import { addCartItem } from '../redux/cart/slice';
+import AddCartBtn from '../components/AddCartBtn';
+import { addFavoritesItem, removeFavoritesItem } from '../redux/favorites/slice';
+import { selectFavorites } from '../redux/favorites/selectors';
 
 const SmartphonePage = () => {
   const { items } = useSelector(selectSmartphones);
   const {id} = useParams();
   const currentSmartphone = items.find(item => item.id === id);
   const dispatch = useDispatch();
+  const { items: favoritesItems } = useSelector(selectFavorites);
 
-
-  const onClickAddCart = () => {
-    if (currentSmartphone) {
-      dispatch(addCartItem({
-        id: currentSmartphone.id,
-        name: currentSmartphone.name,
-        price: currentSmartphone.price,
-        img: currentSmartphone.img,
-        rating: currentSmartphone.rating,
-        count: 1
-      }));
-    }
-  }
-
-  if (!currentSmartphone) {
+  if (!currentSmartphone || !id) {
     return '...загрузка'
   }
+
+  const { name, price, img, rating } = currentSmartphone;
+
+  const currentFavoritesItem = favoritesItems.find((item) => item.id === id);
+
+  const onClickAddFavorites = () => {
+    dispatch(addFavoritesItem({ id, img, price, name, rating, count: 1 }));
+    if (currentFavoritesItem?.id === id) {
+      dispatch(removeFavoritesItem(id));
+    }
+  };
+
+  const clazz = currentFavoritesItem ? ' active' : '';
 
   return (
     <div className="smartphone-page">
       <div className="container">
         <div className="smartphone-page-heading">
-          <div className="smartphone-name no-hover">Смартфон {currentSmartphone.name}</div>
-          <div className="smartphone-id">Код товара: {currentSmartphone.id}</div>
+          <div className="smartphone-name no-hover">Смартфон {name}</div>
+          <div className="smartphone-id">Код товара: {id}</div>
         </div>
         <div className="smartphone-page-info">
-          <img className="smartphone-page__img" src={currentSmartphone.img} alt="" />
+          <img className="smartphone-page__img" src={img} alt="" />
           <div className="smartphone-page-desq">
             <p className="smartphone-page-desq__color">
               Цвет: <span>черный</span>
@@ -46,28 +47,12 @@ const SmartphonePage = () => {
           </div>
           <div className="smartphone-page-actions">
             <div className="price">
-              {currentSmartphone.price} <span>₽</span>
+              {price} <span>₽</span>
             </div>
+            <AddCartBtn item={currentSmartphone} isCountOnRight={true}/>
             <button
-              className="smartphone-page-actions__add-cart-btn btn btn-icon"
-              onClick={onClickAddCart}>
-              <svg
-                fill="#000000"
-                width="800px"
-                height="800px"
-                viewBox="0 0 24 24"
-                data-name="Layer 1"
-                id="Layer_1"
-                xmlns="http://www.w3.org/2000/svg">
-                <title />
-                <path
-                  fill="#fff"
-                  d="M12.2,9h1.6V6.8H16V5.2H13.8V3H12.2V5.2H10V6.8h2.2ZM20,5v5.5L7.45,12.72,5,3H1.25a1,1,0,0,0,0,2H3.47L6.7,18H20V16H8.26l-.33-1.33L22,12.18V5ZM7,19a1.5,1.5,0,1,0,1.5,1.5A1.5,1.5,0,0,0,7,19Zm12,0a1.5,1.5,0,1,0,1.5,1.5A1.5,1.5,0,0,0,19,19Z"
-                />
-              </svg>
-              <span>В корзину</span>
-            </button>
-            <button className="smartphone-page-actions__add-favorites-btn">
+              className={"smartphone-page-actions__add-favorites-btn" + clazz}
+              onClick={onClickAddFavorites}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="#000000"

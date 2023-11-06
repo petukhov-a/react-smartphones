@@ -1,9 +1,10 @@
 .btn-icon {
+    width: 100%;
     display: flex;
-    width: max-content;
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
+    white-space: nowrap;
 
     svg {
         width: 1.7rem;

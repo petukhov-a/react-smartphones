@@ -5,6 +5,7 @@ import CountInput from './CartInput';
 import { selectFavorites } from '../redux/favorites/selectors';
 import { addFavoritesItem, removeFavoritesItem } from '../redux/favorites/slice';
 import FavoritesIcon from './FavoritesIcon';
+import { Link } from 'react-router-dom';
 
 type CartItemProps = {
   item: CartItem;
@@ -21,14 +22,16 @@ const CartItem: FC<CartItemProps> = ({ item }) => {
 
   return (
     <div className="cart-item">
-      <div className="cart-item__img">
-        <img src={img} alt="" />
-      </div>
+      <Link to={`/smartphone/${id}`}>
+        <div className="cart-item__img">
+          <img src={img} alt="" />
+        </div>
+      </Link>
       <div className="cart-item-desq">
         <div className="smartphone-id">Код товара: {id}</div>
-        <a href="./../pages/smartphonePage.html" className="cart-item-desq__title">
+        <Link to={`/smartphone/${id}`} className="cart-item-desq__title">
           {name}
-        </a>
+        </Link>
       </div>
       <div className="cart-item-price">
         <CountInput cartItem={item} isRemoveOnMinus={false} />
