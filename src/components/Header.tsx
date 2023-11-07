@@ -1,13 +1,14 @@
 import React, { useEffect, useReducer, useRef } from 'react';
 import Nav from './Nav';
 import Search from './Search';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCart } from '../redux/cart/selectors';
 
 const Header = () => {
   const { items } = useSelector(selectCart);
   const isMounted = useRef(false);
+  const location = useLocation();
 
   useEffect(() => {
     if (isMounted.current) {
@@ -25,7 +26,7 @@ const Header = () => {
             <p className="header-logo__letter">K</p>
             <p className="header-logo__text">китипинк</p>
           </Link>
-          <Search />
+          {(location.pathname !== '/cart') && <Search />}
           <Nav />
         </div>
       </div>

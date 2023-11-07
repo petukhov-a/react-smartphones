@@ -1,39 +1,39 @@
-import { FC, useEffect, useRef, useState } from "react";
-import SmartphoneCard from "../components/SmartphoneCard";
-import Filter from "../components/Filter";
-import { FilterName, Sort } from "../redux/filter/types";
-import { selectFilter } from "../redux/filter/selectors";
-import { useDispatch, useSelector } from "react-redux";
-import { selectSmartphones } from "../redux/smartphones/selectors";
-import { setSmartphones } from "../redux/smartphones/slice";
-import { Smartphone } from "../redux/smartphones/types";
-import { FilterSliceState } from "../redux/filter/types";
-import { setFilters, setPriceFilterValue } from "../redux/filter/slice";
+import { FC, useEffect, useRef, useState } from 'react';
+import SmartphoneCard from '../components/SmartphoneCard/SmartphoneCard';
+import Filter from '../components/Filter';
+import { FilterName, Sort } from '../redux/filter/types';
+import { selectFilter } from '../redux/filter/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectSmartphones } from '../redux/smartphones/selectors';
+import { setSmartphones } from '../redux/smartphones/slice';
+import { Smartphone } from '../redux/smartphones/types';
+import { FilterSliceState } from '../redux/filter/types';
+import { setFilters, setPriceFilterValue } from '../redux/filter/slice';
 import isEqual from 'lodash.isequal';
-import { useNavigate } from "react-router-dom";
-import qs from "qs";
-import SortList from "../components/SortList";
-import { productsString } from "../utils/formatProductsString";
-import { sortItems } from "../utils/sortItems";
-import { setMainSort } from "../redux/filter/slice";
+import { useNavigate } from 'react-router-dom';
+import qs from 'qs';
+import SortList from '../components/SortList';
+import { productsString } from '../utils/formatProductsString';
+import { sortItems } from '../utils/sortItems';
+import { setMainSort } from '../redux/filter/slice';
+import Skeleton from '../components/SmartphoneCard/Skeleton';
 
 const sortList: Sort[] = [
-  {title: "по цене", property: "price", isAsc: false},
-  {title: "по рейтингу", property: "rating", isAsc: false},
-  {title: "по названию", property: "name", isAsc: false},
+  { title: 'по цене', property: 'price', isAsc: false },
+  { title: 'по рейтингу', property: 'rating', isAsc: false },
+  { title: 'по названию', property: 'name', isAsc: false },
 ];
 
 const mobileSortList: Sort[] = [
-  {mobileTitle: "по возрастанию цены", property: 'price', isAsc: true},
-  {mobileTitle: "по убыванию цены", property: 'price',isAsc: false},
-  {mobileTitle: "по возрастанию рейтинга", property: 'rating',isAsc: true},
-  {mobileTitle: "по убыванию рейтинга", property: 'rating',isAsc: false},
-  {mobileTitle: "по названию (от А до Я)", property: 'name',isAsc: true},
-  {mobileTitle: "по названию (от Я до А)", property: 'name',isAsc: false},
+  { mobileTitle: 'по возрастанию цены', property: 'price', isAsc: true },
+  { mobileTitle: 'по убыванию цены', property: 'price', isAsc: false },
+  { mobileTitle: 'по возрастанию рейтинга', property: 'rating', isAsc: true },
+  { mobileTitle: 'по убыванию рейтинга', property: 'rating', isAsc: false },
+  { mobileTitle: 'по названию (от А до Я)', property: 'name', isAsc: true },
+  { mobileTitle: 'по названию (от Я до А)', property: 'name', isAsc: false },
 ];
 
 const MainPage: FC = () => {
-
   const [isShowFilter, setIsShowFilter] = useState(false);
   const [filteredItems, setFilteredItems] = useState<Smartphone[]>([]);
   const filterBtnRef = useRef<HTMLButtonElement>(null);
@@ -52,25 +52,24 @@ const MainPage: FC = () => {
 
   const fetchItems = (url: string) => {
     fetch(url)
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         dispatch(setSmartphones(res));
       });
-  }
+  };
 
   const setMinMaxPrice = (items: Smartphone[]) => {
-    const minPrice = Math.min(...items.map(item => item.price));
-    const maxPrice = Math.max(...items.map(item => item.price));
+    const minPrice = Math.min(...items.map((item) => item.price));
+    const maxPrice = Math.max(...items.map((item) => item.price));
 
     if (isFinite(minPrice) && isFinite(maxPrice)) {
       dispatch(setPriceFilterValue([minPrice, maxPrice]));
     }
-  }
+  };
 
   useEffect(() => {
     fetchItems(url);
   }, []);
-
 
   useEffect(() => {
     if (isMountedNavigate.current) {
@@ -80,7 +79,7 @@ const MainPage: FC = () => {
         if (filterValues.searchValue === '') {
           queryString = queryString.replace('&searchValue=', '');
         }
-  
+
         navigate(`?${queryString}`);
       }
       prevFiltersRef.current = filterValues;
@@ -89,13 +88,12 @@ const MainPage: FC = () => {
     isMountedNavigate.current = true;
   }, [filterValues]);
 
-    useEffect(() => {
+  useEffect(() => {
     if (isMountedMobileFilter.current) {
       setClazz(isShowFilter ? ' shown' : ' hidden');
     }
 
     isMountedMobileFilter.current = true;
-
   }, [isShowFilter]);
 
   useEffect(() => {
@@ -103,22 +101,23 @@ const MainPage: FC = () => {
       const params = qs.parse(window.location.search.substring(1)) as unknown;
       const filters = params as FilterSliceState;
 
+      filters.mainSort.isAsc = filters.mainSort.isAsc === true;
+      filters.favoritesSort.isAsc = filters.favoritesSort.isAsc === true;
+
       dispatch(setFilters(filters));
     }
   }, []);
 
   const isFilterCheckboxExist = (filterName: FilterName | 'prices') => {
     if (filterName !== 'prices') {
-
       const filterValue = filterValues[filterName];
       if (Array.isArray(filterValue)) {
         if (filterValue.length !== 0) {
           return true;
         }
       }
-
     }
-  }
+  };
 
   const isMatchFilters = (item: Smartphone) => {
     if (!isMatchCheckboxFilters(item)) {
@@ -134,7 +133,7 @@ const MainPage: FC = () => {
     }
 
     return true;
-  }
+  };
 
   const isMatchSearch = (item: Smartphone) => {
     if (filterValues.searchValue !== '') {
@@ -146,7 +145,7 @@ const MainPage: FC = () => {
       return false;
     }
     return true;
-  }
+  };
 
   const isMatchCheckboxFilters = (item: Smartphone) => {
     for (let key in filterValues) {
@@ -156,37 +155,39 @@ const MainPage: FC = () => {
         const isMatchFilter = filterValues[filterKey].includes(matchingValue);
         if (!isMatchFilter) {
           return false;
-         }
+        }
       }
     }
 
     return true;
-  }
+  };
 
   const isMatchPriceFilter = (item: Smartphone) => {
-    if (item.price >= filterValues.prices[0] &&
-        item.price <= filterValues.prices[1]) {
-          return true;
+    if (item.price >= filterValues.prices[0] && item.price <= filterValues.prices[1]) {
+      return true;
     }
     return false;
-  }
+  };
 
   useEffect(() => {
     if (!isEqual(filterValues, prevFiltersRef)) {
-      const newItems = items.filter(item => isMatchFilters(item));
+      const newItems = items.filter((item) => isMatchFilters(item));
 
       sortItems(newItems, filterValues.mainSort.isAsc, mainSort.property);
       setFilteredItems(newItems);
-  
+
       if (filterValues.prices.toString() === `0,0`) {
         setMinMaxPrice(items);
       }
     }
     prevFiltersRef.current = filterValues;
-
   }, [filterValues, items]);
 
-  const smartphones = filteredItems.map((item: Smartphone) => <SmartphoneCard item={item} key={item.id} />);
+  const smartphones = filteredItems.map((item: Smartphone) => (
+    <SmartphoneCard item={item} key={item.id} />
+  ));
+
+  const skeletons = [...new Array(filteredItems.length)].map((_, index) => <Skeleton key={index} />);
 
   return (
     <>
@@ -210,16 +211,19 @@ const MainPage: FC = () => {
             sortList={sortList}
             mobileSortList={mobileSortList}
             sortData={mainSort}
-            setSort={setMainSort}/>
+            setSort={setMainSort}
+          />
           <div className="smartphones-content">
-            <div className="smartphones-content-cards">{smartphones}</div>
+            <div className="smartphones-content-cards">
+              {smartphones}
+            </div>
             <Filter isShow={isShowFilter} setIsShow={setIsShowFilter} filterBtnRef={filterBtnRef} />
           </div>
         </div>
       </div>
-      <div className={"overlay" + clazz}></div>
+      <div className={'overlay' + clazz}></div>
     </>
   );
-}
+};
 
 export default MainPage;

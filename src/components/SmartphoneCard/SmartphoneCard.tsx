@@ -1,16 +1,15 @@
 import { FC } from 'react';
-import { Smartphone } from '../redux/smartphones/types';
+import { Smartphone } from '../../redux/smartphones/types';
 import { Link } from 'react-router-dom';
-import FavoritesIcon from './FavoritesIcon';
-import SmartphoneSpecs from './SmartphoneSpecs';
-import AddCartBtn from './AddCartBtn';
+import FavoritesIcon from '../FavoritesIcon';
+import SmartphoneSpecs from '../SmartphoneSpecs';
+import AddCartBtn from '../AddCartBtn';
 
 type SmartphoneCardProps = {
   item: Smartphone;
-}
+};
 
-const SmartphoneCard: FC<SmartphoneCardProps> = ( {item} ) => {
-
+const SmartphoneCard: FC<SmartphoneCardProps> = ({ item }) => {
   const { id, name, img, rating, price } = item;
 
   return (
@@ -28,7 +27,7 @@ const SmartphoneCard: FC<SmartphoneCardProps> = ( {item} ) => {
               <p className="smartphone-id">Код товара: {id}</p>
             </div>
             <div className="separator"></div>
-            <SmartphoneSpecs item={item}/>
+            <SmartphoneSpecs item={item} />
           </div>
           <div className="smartphone-card-add-cart">
             <div className="price">
@@ -37,11 +36,11 @@ const SmartphoneCard: FC<SmartphoneCardProps> = ( {item} ) => {
               </p>
             </div>
             <div className="smartphone-card-add-cart-action">
-              <AddCartBtn item={item} isCountOnRight={false}/>
+              <AddCartBtn item={item} isCountOnRight={false} />
             </div>
           </div>
           <div className="smartphone-card__add-favorites">
-            <FavoritesIcon item={ {id, img, price, name, rating, count: 1} }/>
+            <FavoritesIcon item={{ id, img, price, name, rating, count: 1 }} />
           </div>
         </div>
       </div>
