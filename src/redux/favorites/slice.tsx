@@ -2,10 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { calcTotalCount } from '../../utils/calcTotalCount';
 import { FavoritesSliceState } from './types';
+import { getDataFromLS } from '../../utils/getCartItemsFromLS';
+
+const { items, totalCount } = getDataFromLS('favorites');
 
 const initialState: FavoritesSliceState = {
-  items: [],
-  totalCount: 0
+  items: items,
+  totalCount: totalCount
 };
 
 export const favoritesSlice = createSlice({
