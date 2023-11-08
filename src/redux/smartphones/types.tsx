@@ -1,5 +1,6 @@
 export interface SmartphoneSliceState {
-    items: Smartphone[]
+    items: Smartphone[],
+    status: Status
 }
 
 export type Smartphone = {
@@ -24,3 +25,9 @@ export type Smartphone = {
     fingerprintScanner: string,
     img: string
   }
+
+export enum Status {
+  LOADING = 'loading',
+  SUCCESS = 'success',
+  ERROR = 'error'
+}

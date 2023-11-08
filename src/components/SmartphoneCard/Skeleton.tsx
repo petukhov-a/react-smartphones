@@ -5,9 +5,9 @@ const Skeleton = () => (
   <ContentLoader 
     className="smartphone-card-wrapper"
     speed={2}
-    width={1000}
+    width={1100}
     height={300}
-    viewBox="0 0 900 300"
+    viewBox="-50 0 1000 300"
     backgroundColor="#f3f3f3"
     foregroundColor="#ecebeb"
   >
@@ -18,9 +18,9 @@ const Skeleton = () => (
     <rect x="205" y="211" rx="5" ry="5" width="225" height="11" /> 
     <rect x="204" y="133" rx="5" ry="5" width="225" height="11" /> 
     <rect x="206" y="172" rx="5" ry="5" width="172" height="11" />
-    <rect x="702" y="168" rx="5" ry="5" width="151" height="37" /> 
+    <rect x="832" y="188" rx="5" ry="5" width="151" height="37" /> 
     <rect x="3" y="14" rx="10" ry="10" width="180" height="250" /> 
-    <rect x="702" y="226" rx="5" ry="5" width="151" height="37" />
+    <rect x="832" y="246" rx="5" ry="5" width="151" height="37" />
   </ContentLoader>
 )
 

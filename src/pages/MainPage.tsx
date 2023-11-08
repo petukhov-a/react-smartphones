@@ -17,6 +17,8 @@ import { productsString } from '../utils/formatProductsString';
 import { sortItems } from '../utils/sortItems';
 import { setMainSort } from '../redux/filter/slice';
 import Skeleton from '../components/SmartphoneCard/Skeleton';
+import { fetchSmartphones } from '../redux/smartphones/asyncActions';
+import { useAppDispatch } from '../redux/store';
 
 const sortList: Sort[] = [
   { title: 'по цене', property: 'price', isAsc: false },
@@ -40,23 +42,13 @@ const MainPage: FC = () => {
   const [clazz, setClazz] = useState('');
   const isMountedNavigate = useRef(false);
   const isMountedMobileFilter = useRef(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { mainSort } = useSelector(selectFilter);
 
   const filterValues = useSelector(selectFilter);
-  const { items } = useSelector(selectSmartphones);
+  const { items, status } = useSelector(selectSmartphones);
   const prevFiltersRef = useRef<FilterSliceState>();
-
-  const url = `https://64de3b97825d19d9bfb254c6.mockapi.io/items?`;
-
-  const fetchItems = (url: string) => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((res) => {
-        dispatch(setSmartphones(res));
-      });
-  };
 
   const setMinMaxPrice = (items: Smartphone[]) => {
     const minPrice = Math.min(...items.map((item) => item.price));
@@ -67,8 +59,14 @@ const MainPage: FC = () => {
     }
   };
 
+  const getSmartphones = async () => {
+    dispatch(
+      fetchSmartphones()
+    );
+  }
+
   useEffect(() => {
-    fetchItems(url);
+    getSmartphones();
   }, []);
 
   useEffect(() => {
@@ -183,11 +181,10 @@ const MainPage: FC = () => {
     prevFiltersRef.current = filterValues;
   }, [filterValues, items]);
 
+  const skeletons = [...new Array(10)].map((_, index) => <Skeleton key={index} />);
   const smartphones = filteredItems.map((item: Smartphone) => (
     <SmartphoneCard item={item} key={item.id} />
   ));
-
-  const skeletons = [...new Array(filteredItems.length)].map((_, index) => <Skeleton key={index} />);
 
   return (
     <>
@@ -214,9 +211,16 @@ const MainPage: FC = () => {
             setSort={setMainSort}
           />
           <div className="smartphones-content">
-            <div className="smartphones-content-cards">
-              {smartphones}
-            </div>
+            {status === 'error' ? (
+              <div className="smartphones-content__error-info">
+                <h2>УПС! Произошла ошибка! 😔</h2>
+                <p>Не удалось загрузить смартфоны</p>
+              </div>
+            ) : (
+              <div className="smartphones-content-cards">
+                {status === 'loading' ? skeletons : smartphones}
+              </div>
+            )}
             <Filter isShow={isShowFilter} setIsShow={setIsShowFilter} filterBtnRef={filterBtnRef} />
           </div>
         </div>

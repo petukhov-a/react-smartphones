@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Nav from './Nav';
 import Search from './Search';
 import { Link, useLocation } from 'react-router-dom';
@@ -31,7 +31,7 @@ const Header = () => {
             <p className="header-logo__letter">K</p>
             <p className="header-logo__text">китипинк</p>
           </Link>
-          {(location.pathname !== '/cart') && <Search />}
+          {location.pathname === '/' && <Search />}
           <Nav />
         </div>
       </div>

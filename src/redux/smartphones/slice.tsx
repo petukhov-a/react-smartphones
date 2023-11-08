@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { Smartphone, SmartphoneSliceState } from './types';
+import { Smartphone, SmartphoneSliceState, Status } from './types';
+import { fetchSmartphones } from './asyncActions';
 
 const initialState: SmartphoneSliceState = {
     items: [],
+    status: Status.LOADING,
 }
 
 export const smartphoneSlice = createSlice({
@@ -13,6 +15,21 @@ export const smartphoneSlice = createSlice({
     setSmartphones(state, action: PayloadAction<Smartphone[]>) {
         state.items = action.payload
     }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchSmartphones.pending, (state) => {
+        state.status = Status.LOADING;
+        state.items = [];
+      })
+      .addCase(fetchSmartphones.fulfilled, (state, action) => {
+        state.status = Status.SUCCESS;
+        state.items = action.payload;
+      })
+      .addCase(fetchSmartphones.rejected, (state) => {
+        state.status = Status.ERROR;
+        state.items = [];
+      })
   },
 })
 

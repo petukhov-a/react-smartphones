@@ -3,6 +3,21 @@
         margin-top: 2rem;
         display: grid;
         grid-template-columns: 3.5fr 1fr;
+
+        &__error-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10rem;
+            gap: 3rem;
+            h2 {
+                font-size: 4rem;
+                font-weight: 600;
+            }
+            p {
+                font-size: 3rem;
+            }
+        }
     }
 
     &-header {
