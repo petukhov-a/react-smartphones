@@ -19,6 +19,9 @@ import { setMainSort } from '../redux/filter/slice';
 import Skeleton from '../components/SmartphoneCard/Skeleton';
 import { fetchSmartphones } from '../redux/smartphones/asyncActions';
 import { useAppDispatch } from '../redux/store';
+import Pagination from '../components/Pagination';
+import { selectPagination } from '../redux/pagination/selectors';
+import { setPageCount } from '../redux/pagination/slice';
 
 const sortList: Sort[] = [
   { title: 'по цене', property: 'price', isAsc: false },
@@ -50,6 +53,8 @@ const MainPage: FC = () => {
   const { items, status } = useSelector(selectSmartphones);
   const prevFiltersRef = useRef<FilterSliceState>();
 
+  const { currentPage, itemsPerPage } = useSelector(selectPagination);
+
   const setMinMaxPrice = (items: Smartphone[]) => {
     const minPrice = Math.min(...items.map((item) => item.price));
     const maxPrice = Math.max(...items.map((item) => item.price));
@@ -59,14 +64,10 @@ const MainPage: FC = () => {
     }
   };
 
-  const getSmartphones = async () => {
+  useEffect(() => {
     dispatch(
       fetchSmartphones()
     );
-  }
-
-  useEffect(() => {
-    getSmartphones();
   }, []);
 
   useEffect(() => {
@@ -172,14 +173,21 @@ const MainPage: FC = () => {
       const newItems = items.filter((item) => isMatchFilters(item));
 
       sortItems(newItems, filterValues.mainSort.isAsc, mainSort.property);
-      setFilteredItems(newItems);
+
+      const pageCount = Math.ceil(newItems.length / itemsPerPage);
+      dispatch(setPageCount(pageCount));
+
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+
+      setFilteredItems(newItems.slice(startIndex, endIndex));
 
       if (filterValues.prices.toString() === `0,0`) {
         setMinMaxPrice(items);
       }
     }
     prevFiltersRef.current = filterValues;
-  }, [filterValues, items]);
+  }, [filterValues, items, currentPage]);
 
   const skeletons = [...new Array(10)].map((_, index) => <Skeleton key={index} />);
   const smartphones = filteredItems.map((item: Smartphone) => (
@@ -223,6 +231,7 @@ const MainPage: FC = () => {
             )}
             <Filter isShow={isShowFilter} setIsShow={setIsShowFilter} filterBtnRef={filterBtnRef} />
           </div>
+          <Pagination />
         </div>
       </div>
       <div className={'overlay' + clazz}></div>

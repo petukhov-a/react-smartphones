@@ -5,7 +5,7 @@ import { fetchSmartphones } from './asyncActions';
 
 const initialState: SmartphoneSliceState = {
     items: [],
-    status: Status.LOADING,
+    status: Status.LOADING
 }
 
 export const smartphoneSlice = createSlice({

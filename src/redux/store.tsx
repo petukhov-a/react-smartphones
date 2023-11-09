@@ -3,6 +3,7 @@ import filter from './filter/slice';
 import smartphones from './smartphones/slice';
 import cart from './cart/slice';
 import favorites from './favorites/slice';
+import pagination from './pagination/slice';
 import { useDispatch } from 'react-redux';
 
 export const store = configureStore({
@@ -10,7 +11,8 @@ export const store = configureStore({
     filter,
     smartphones,
     cart,
-    favorites
+    favorites,
+    pagination
   },
 });
 
