@@ -1,12 +1,13 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import FilterItem from './FilterItem';
-import { FilterName } from '../redux/filter/types';
+import { FilterName, FilterSliceState } from '../redux/filter/types';
 import FilterPrice from './FilterPrice';
 import { clearFilters } from '../redux/filter/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFilter } from '../redux/filter/selectors';
 import { useScrollBlock } from '../hooks/useScrollBlock';
 import { handleOutsideClick } from '../utils/handleOutsideClick';
+import { Smartphone } from '../redux/smartphones/types';
 
 export type FilterInfo = {
   title: string;
@@ -14,6 +15,67 @@ export type FilterInfo = {
   values: string[];
   unit?: string;
 }
+
+export const isFilterCheckboxExist = (filterName: FilterName | 'prices', filterValues: FilterSliceState) => {
+  if (filterName !== 'prices') {
+    const filterValue = filterValues[filterName];
+    if (Array.isArray(filterValue)) {
+      if (filterValue.length !== 0) {
+        return true;
+      }
+    }
+  }
+};
+
+export const isMatchSearch = (item: Smartphone, filterValues: FilterSliceState) => {
+  if (filterValues.searchValue !== '') {
+    const itemName = item.name.toLowerCase();
+    const searchValue = filterValues.searchValue.toLowerCase();
+    if (itemName.includes(searchValue)) {
+      return true;
+    }
+    return false;
+  }
+  return true;
+};
+
+export const isMatchCheckboxFilters = (item: Smartphone, filterValues: FilterSliceState) => {
+  for (let key in filterValues) {
+    const filterKey = key as FilterName;
+    if (isFilterCheckboxExist(filterKey, filterValues)) {
+      const matchingValue = String(item[filterKey]);
+      const isMatchFilter = filterValues[filterKey].includes(matchingValue);
+      if (!isMatchFilter) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+};
+
+export const isMatchPriceFilter = (item: Smartphone, filterValues: FilterSliceState) => {
+  if (item.price >= filterValues.prices[0] && item.price <= filterValues.prices[1]) {
+    return true;
+  }
+  return false;
+};
+
+export const isMatchFilters = (item: Smartphone, filterValues: FilterSliceState) => {
+  if (!isMatchCheckboxFilters(item, filterValues)) {
+    return false;
+  }
+
+  if (!isMatchPriceFilter(item, filterValues)) {
+    return false;
+  }
+
+  if (!isMatchSearch(item, filterValues)) {
+    return false;
+  }
+
+  return true;
+};
 
 type FilterProps = {
   isShow: boolean;

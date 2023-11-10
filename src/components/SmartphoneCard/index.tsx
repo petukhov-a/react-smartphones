@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import FavoritesIcon from '../FavoritesIcon';
 import SmartphoneSpecs from '../SmartphoneSpecs';
 import AddCartBtn from '../AddCartBtn';
+import { formatPrice } from '../../utils/formatPrice';
 
 type SmartphoneCardProps = {
   item: Smartphone;
@@ -32,7 +33,7 @@ const SmartphoneCard: FC<SmartphoneCardProps> = ({ item }) => {
           <div className="smartphone-card-add-cart">
             <div className="price">
               <p>
-                {price} <span>₽</span>
+                {formatPrice(price)} <span>₽</span>
               </p>
             </div>
             <div className="smartphone-card-add-cart-action">

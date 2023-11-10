@@ -10,6 +10,8 @@ import { Sort } from '../redux/filter/types';
 import { sortItems } from '../utils/sortItems';
 import SortList from '../components/SortList';
 import { setFavoritesSort } from '../redux/filter/slice';
+import emptyFavoritesImg from '../assets/img/empty-favorites.jpg';
+import EmptyItems from '../components/EmptyItems';
 
 const sortList: Sort[] = [
   { title: 'по цене', property: 'price', isAsc: false },
@@ -27,7 +29,7 @@ const mobileSortList: Sort[] = [
 ];
 
 const FavoritesPage = () => {
-  const { items } = useSelector(selectFavorites);
+  const { items, totalCount } = useSelector(selectFavorites);
   const [sortedItems, setSortedItems] = useState<CartItem[]>([]);
   const { favoritesSort } = useSelector(selectFilter);
 
@@ -36,7 +38,6 @@ const FavoritesPage = () => {
 
     sortItems(newItems, favoritesSort.isAsc, favoritesSort.property);
     setSortedItems(newItems);
-
   }, [favoritesSort, items]);
 
   const favorites = sortedItems.map((item) => <FavoritesCard item={item} key={item.id} />);
@@ -45,6 +46,10 @@ const FavoritesPage = () => {
   const onClickAddCartAll = () => {
     items.forEach((item) => dispatch(addCartItem(item)));
   };
+
+  if (totalCount === 0) {
+    return <EmptyItems text="В избранном ничего нет!" img={emptyFavoritesImg} />;
+  }
 
   return (
     <div className="favorites">
@@ -91,9 +96,7 @@ const FavoritesPage = () => {
               sortData={favoritesSort}
               setSort={setFavoritesSort}
             />
-            <div className="favorites-cards">
-              {favorites}
-            </div>
+            <div className="favorites-cards">{favorites}</div>
           </div>
         </div>
       </div>

@@ -1,11 +1,10 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import SmartphoneCard from '../components/SmartphoneCard/SmartphoneCard';
-import Filter from '../components/Filter';
-import { FilterName, Sort } from '../redux/filter/types';
+import SmartphoneCard from '../components/SmartphoneCard';
+import Filter, { isMatchFilters } from '../components/Filter';
+import { Sort } from '../redux/filter/types';
 import { selectFilter } from '../redux/filter/selectors';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectSmartphones } from '../redux/smartphones/selectors';
-import { setSmartphones } from '../redux/smartphones/slice';
 import { Smartphone } from '../redux/smartphones/types';
 import { FilterSliceState } from '../redux/filter/types';
 import { setFilters, setPriceFilterValue } from '../redux/filter/slice';
@@ -107,80 +106,16 @@ const MainPage: FC = () => {
     }
   }, []);
 
-  const isFilterCheckboxExist = (filterName: FilterName | 'prices') => {
-    if (filterName !== 'prices') {
-      const filterValue = filterValues[filterName];
-      if (Array.isArray(filterValue)) {
-        if (filterValue.length !== 0) {
-          return true;
-        }
-      }
-    }
-  };
-
-  const isMatchFilters = (item: Smartphone) => {
-    if (!isMatchCheckboxFilters(item)) {
-      return false;
-    }
-
-    if (!isMatchPriceFilter(item)) {
-      return false;
-    }
-
-    if (!isMatchSearch(item)) {
-      return false;
-    }
-
-    return true;
-  };
-
-  const isMatchSearch = (item: Smartphone) => {
-    if (filterValues.searchValue !== '') {
-      const itemName = item.name.toLowerCase();
-      const searchValue = filterValues.searchValue.toLowerCase();
-      if (itemName.includes(searchValue)) {
-        return true;
-      }
-      return false;
-    }
-    return true;
-  };
-
-  const isMatchCheckboxFilters = (item: Smartphone) => {
-    for (let key in filterValues) {
-      const filterKey = key as FilterName;
-      if (isFilterCheckboxExist(filterKey)) {
-        const matchingValue = String(item[filterKey]);
-        const isMatchFilter = filterValues[filterKey].includes(matchingValue);
-        if (!isMatchFilter) {
-          return false;
-        }
-      }
-    }
-
-    return true;
-  };
-
-  const isMatchPriceFilter = (item: Smartphone) => {
-    if (item.price >= filterValues.prices[0] && item.price <= filterValues.prices[1]) {
-      return true;
-    }
-    return false;
-  };
-
   useEffect(() => {
     if (!isEqual(filterValues, prevFiltersRef)) {
-      const newItems = items.filter((item) => isMatchFilters(item));
+      const newItems = items.filter((item) => isMatchFilters(item, filterValues));
 
       sortItems(newItems, filterValues.mainSort.isAsc, mainSort.property);
 
       const pageCount = Math.ceil(newItems.length / itemsPerPage);
       dispatch(setPageCount(pageCount));
 
-      const startIndex = (currentPage - 1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage;
-
-      setFilteredItems(newItems.slice(startIndex, endIndex));
+      setFilteredItems(newItems);
 
       if (filterValues.prices.toString() === `0,0`) {
         setMinMaxPrice(items);
@@ -190,9 +125,15 @@ const MainPage: FC = () => {
   }, [filterValues, items, currentPage]);
 
   const skeletons = [...new Array(10)].map((_, index) => <Skeleton key={index} />);
-  const smartphones = filteredItems.map((item: Smartphone) => (
-    <SmartphoneCard item={item} key={item.id} />
-  ));
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const smartphones = filteredItems
+    .slice(startIndex, endIndex)
+    .map((item: Smartphone) => (
+      <SmartphoneCard item={item} key={item.id} />
+    ));
 
   return (
     <>
