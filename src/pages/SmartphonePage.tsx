@@ -5,6 +5,7 @@ import SmartphoneSpecs from '../components/SmartphoneSpecs';
 import AddCartBtn from '../components/AddCartBtn';
 import { addFavoritesItem, removeFavoritesItem } from '../redux/favorites/slice';
 import { selectFavorites } from '../redux/favorites/selectors';
+import { formatPrice } from '../utils/formatPrice';
 
 const SmartphonePage = () => {
   const { items } = useSelector(selectSmartphones);
@@ -47,7 +48,7 @@ const SmartphonePage = () => {
           </div>
           <div className="smartphone-page-actions">
             <div className="price">
-              {price} <span>₽</span>
+              {formatPrice(price)} <span>₽</span>
             </div>
             <AddCartBtn item={currentSmartphone} isCountOnRight={true}/>
             <button

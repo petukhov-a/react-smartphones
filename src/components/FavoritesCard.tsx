@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { removeFavoritesItem } from '../redux/favorites/slice';
 import { addCartItem } from '../redux/cart/slice';
 import { Link } from 'react-router-dom';
+import { formatPrice } from '../utils/formatPrice';
 
 type FavoritesCardProps = {
   item: CartItem;
@@ -29,7 +30,7 @@ const FavoritesCard: FC<FavoritesCardProps> = ( {item} ) => {
           className="favorites-card-footer"
           onClick={() => dispatch(addCartItem({name, price, img, id, rating, count: 1}))}>
           <p className="price">
-            {price} <span>₽</span>
+            {formatPrice(price)} <span>₽</span>
           </p>
           <button
             className="favorites-card__cart-btn">

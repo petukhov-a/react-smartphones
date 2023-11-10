@@ -6,6 +6,7 @@ import { selectFavorites } from '../redux/favorites/selectors';
 import { addFavoritesItem, removeFavoritesItem } from '../redux/favorites/slice';
 import FavoritesIcon from './FavoritesIcon';
 import { Link } from 'react-router-dom';
+import { formatPrice } from '../utils/formatPrice';
 
 type CartItemProps = {
   item: CartItem;
@@ -37,7 +38,7 @@ const CartItem: FC<CartItemProps> = ({ item }) => {
         <CountInput cartItem={item} isRemoveOnMinus={false} />
         <div className="price">
           <p>
-            {price} <span>₽</span>
+            {formatPrice(price)} <span>₽</span>
           </p>
         </div>
       </div>

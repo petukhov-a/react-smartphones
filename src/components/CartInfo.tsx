@@ -4,6 +4,7 @@ import { clearCart } from '../redux/cart/slice';
 import { selectCart } from '../redux/cart/selectors';
 import { productsString } from '../utils/formatProductsString';
 import { addFavoritesItem } from '../redux/favorites/slice';
+import { formatPrice } from '../utils/formatPrice';
 
 const CartInfo = () => {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ const CartInfo = () => {
           <p className="сart-info__items-count">{totalCount} {productsString(totalCount)}</p>
         </div>
         <p className="price">
-          {totalPrice} <span>₽</span>
+          {formatPrice(totalPrice)} <span>₽</span>
         </p>
         <button className="btn btn-goto-order">
           <span>Перейти к оформлению</span>

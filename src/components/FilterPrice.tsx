@@ -5,7 +5,6 @@ import { selectFilter } from '../redux/filter/selectors';
 import { FilterPrices } from '../redux/filter/types';
 import { setPriceFilterValue } from '../redux/filter/slice';
 import debounce from 'lodash.debounce';
-import { selectSmartphones } from '../redux/smartphones/selectors';
 
 const FilterPrice = () => {
   const { prices } = useSelector(selectFilter);
