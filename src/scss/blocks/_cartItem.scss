@@ -76,7 +76,7 @@
 
 @media(max-width: 768px) {
     .cart-item {
-        grid-template-columns: min-content auto auto;
+        grid-template-columns: min-content auto 1fr;
         gap: 1rem;
         row-gap: 3rem;
 
