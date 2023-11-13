@@ -124,7 +124,7 @@ const MainPage: FC = () => {
     prevFiltersRef.current = filterValues;
   }, [filterValues, items, currentPage]);
 
-  const skeletons = [...new Array(10)].map((_, index) => <Skeleton key={index} />);
+  const skeletons = [...new Array(4)].map((_, index) => <Skeleton key={index} />);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;

@@ -20,3 +20,21 @@
         }
     }
 }
+
+@media (max-width: 590px) {
+    .root {
+        img {
+            max-width: 70rem;
+            max-height: 70rem;
+        }
+    }
+}
+
+@media (max-width: 490px) {
+    .root {
+        img {
+            max-width: 50rem;
+            max-height: 50rem;
+        }
+    }
+}

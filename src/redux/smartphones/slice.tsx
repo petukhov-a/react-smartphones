@@ -13,7 +13,7 @@ export const smartphoneSlice = createSlice({
   initialState,
   reducers: {
     setSmartphones(state, action: PayloadAction<Smartphone[]>) {
-        state.items = action.payload
+      state.items = action.payload
     }
   },
   extraReducers: (builder) => {
