@@ -1,24 +1,42 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { selectSmartphones } from '../redux/smartphones/selectors';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import SmartphoneSpecs from '../components/SmartphoneSpecs';
 import AddCartBtn from '../components/AddCartBtn';
 import { addFavoritesItem, removeFavoritesItem } from '../redux/favorites/slice';
 import { selectFavorites } from '../redux/favorites/selectors';
 import { formatPrice } from '../utils/formatPrice';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Smartphone } from '../redux/smartphones/types';
 
 const SmartphonePage = () => {
-  const { items } = useSelector(selectSmartphones);
   const {id} = useParams();
-  const currentSmartphone = items.find(item => item.id === id);
+  const [smartphone, setSmartphone] = useState<Smartphone>();
   const dispatch = useDispatch();
   const { items: favoritesItems } = useSelector(selectFavorites);
+  const navigate = useNavigate();
 
-  if (!currentSmartphone || !id) {
-    return '...загрузка'
+  useEffect(() => {
+    async function fetchSmartphone() {
+      try {
+        const { data } = await axios.get<Smartphone[]>('https://mocki.io/v1/5ffbcdc6-ffae-418e-a131-30622563ddf4');
+        const currentSmartphone = data.find(item => item.id === id);
+
+        setSmartphone(currentSmartphone);
+      } catch (error) {
+        alert('Ошибка при получении смартфона');
+        navigate('/');
+      }
+    }
+
+    fetchSmartphone();
+  }, []);
+
+  if (!smartphone || !id) {
+    return '...загрузка';
   }
 
-  const { name, price, img, rating } = currentSmartphone;
+  const { name, price, img, rating } = smartphone;
 
   const currentFavoritesItem = favoritesItems.find((item) => item.id === id);
 
@@ -44,13 +62,13 @@ const SmartphonePage = () => {
             <p className="smartphone-page-desq__color">
               Цвет: <span>черный</span>
             </p>
-            <SmartphoneSpecs item={currentSmartphone} />
+            <SmartphoneSpecs item={smartphone} />
           </div>
           <div className="smartphone-page-actions">
             <div className="price">
               {formatPrice(price)} <span>₽</span>
             </div>
-            <AddCartBtn item={currentSmartphone} isCountOnRight={true}/>
+            <AddCartBtn item={smartphone} isCountOnRight={true}/>
             <button
               className={"smartphone-page-actions__add-favorites-btn" + clazz}
               onClick={onClickAddFavorites}>
