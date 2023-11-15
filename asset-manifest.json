@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/react-smartphones/static/css/main.9391b39b.css",
-    "main.js": "/react-smartphones/static/js/main.bb7a2a48.js",
+    "main.js": "/react-smartphones/static/js/main.44290305.js",
     "static/media/empty-favorites.jpg": "/react-smartphones/static/media/empty-favorites.c92dc19dd094a7f68727.jpg",
     "static/media/not-found.jpg": "/react-smartphones/static/media/not-found.87e811c57487773722be.jpg",
     "static/media/empty-cart.jpg": "/react-smartphones/static/media/empty-cart.63f5d2c8f52d7557cbe4.jpg",
@@ -12,10 +12,10 @@
     "static/media/minus.svg": "/react-smartphones/static/media/minus.9646c723442fa9db9e28c8a79d7d935e.svg",
     "static/media/sort-descending.svg": "/react-smartphones/static/media/sort-descending.99516a26de8a6db6a8184e6e2b1a21d2.svg",
     "main.9391b39b.css.map": "/react-smartphones/static/css/main.9391b39b.css.map",
-    "main.bb7a2a48.js.map": "/react-smartphones/static/js/main.bb7a2a48.js.map"
+    "main.44290305.js.map": "/react-smartphones/static/js/main.44290305.js.map"
   },
   "entrypoints": [
     "static/css/main.9391b39b.css",
-    "static/js/main.bb7a2a48.js"
+    "static/js/main.44290305.js"
   ]
 }
