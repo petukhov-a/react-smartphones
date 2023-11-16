@@ -5,11 +5,13 @@ import { selectFilter } from '../redux/filter/selectors';
 import { FilterPrices } from '../redux/filter/types';
 import { setPriceFilterValue } from '../redux/filter/slice';
 import debounce from 'lodash.debounce';
+import clsx from 'clsx';
 
 const FilterPrice = () => {
   const { prices } = useSelector(selectFilter);
   const [smartphonePrices, setSmartphonePrices] = useState<FilterPrices>([0, 0]);
   const dispatch = useDispatch();
+  const [ isActive, setIsActive ] = useState(true);
 
   useEffect(() => {
     setSmartphonePrices([prices[0], prices[1]]);
@@ -30,11 +32,15 @@ const FilterPrice = () => {
     updatePriceValue(newPrices);
   };
 
+  const onFilterClick = () => {
+    setIsActive(isActive => !isActive);
+  }
+
   return (
-    <details className="smartphones-filter-item" open>
+    <details className="smartphones-filter-item" open onClick={onFilterClick}>
       <summary className="smartphones-filter-item__heading">
         <span>Цена</span>
-        <img className="drop-down-arrow" src={drodDownArrow} alt="drop-down-arrow" />
+        <img className={clsx("drop-down-arrow", isActive && 'active')} src={drodDownArrow} alt="drop-down-arrow" />
       </summary>
       <div className="price-inputs">
         <input

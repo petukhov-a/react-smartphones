@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { removeFilterValue, setFilterValue } from '../redux/filter/slice';
 import { FilterInfo } from './Filter';
 import { selectFilter } from '../redux/filter/selectors';
+import clsx from 'clsx';
 
 type FilterItemProps = {
   filterInfo: FilterInfo;
@@ -15,6 +16,11 @@ const FilterItem: FC<FilterItemProps> = ({ filterInfo, isCleared } ) => {
   const dispatch = useDispatch();
   const [checkedList, setCheckedList] = useState<number[]>([]);
   const filterValues = useSelector(selectFilter);
+  const [ isActive, setIsActive ] = useState(true);
+
+  const onFilterClick = () => {
+    setIsActive(isActive => !isActive);
+  }
 
   useEffect(() => {
     if (isCleared) {
@@ -48,10 +54,10 @@ const FilterItem: FC<FilterItemProps> = ({ filterInfo, isCleared } ) => {
   };
 
   return (
-    <details className="smartphones-filter-item" open>
+    <details className="smartphones-filter-item" open onClick={onFilterClick}>
       <summary className="smartphones-filter-item__heading">
         <span>{title}</span>
-        <img className="drop-down-arrow" src={drodDownArrow} alt="drop-down-arrow" />
+        <img className={clsx("drop-down-arrow", isActive && 'active')} src={drodDownArrow} alt="drop-down-arrow" />
       </summary>
       <ul className="smartphones-filter-item-list">
         {values.map((item, index) => (

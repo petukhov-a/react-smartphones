@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import FavoritesCard from '../components/FavoritesCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFavorites } from '../redux/favorites/selectors';
@@ -28,7 +28,7 @@ const mobileSortList: Sort[] = [
   { mobileTitle: 'по названию (от Я до А)', property: 'name', isAsc: false },
 ];
 
-const FavoritesPage = () => {
+const FavoritesPage: FC = () => {
   const { items, totalCount } = useSelector(selectFavorites);
   const [sortedItems, setSortedItems] = useState<CartItem[]>([]);
   const { favoritesSort } = useSelector(selectFilter);

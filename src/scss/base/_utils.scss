@@ -21,50 +21,18 @@
 
 .overlay {
 	position: fixed;
-	display: none;
 	inset: 0px;
-	z-index: -1;
+	z-index: 101;
 	width: 100vw;
 	height: 100vh;
 	background-color: rgba(0, 0, 0, 0.75);
 	opacity: 0;
 	transition: opacity 0.3s ease-in-out;
 	will-change: opacity;
+	pointer-events: none;
 
 	&.shown {
-		display: block;
 		opacity: 1;
-		z-index: 101;
-		animation-name: custom-fadein;
-		animation-duration: 0.3s;
-	}
-
-	&.hidden {
-		display: block;
-		animation-name: custom-fadeout;
-		animation-duration: 0.3s;
-	}
-}
-
-@keyframes custom-fadein {
-	0% {
-		opacity: 0;
-	}
-
-	100% {
-		opacity: 1;
-	}
-}
-
-@keyframes custom-fadeout {
-	0% {
-		opacity: 1;
-		z-index: 101;
-	}
-
-	100% {
-		opacity: 0;
-		z-index: -1;
 	}
 }
 

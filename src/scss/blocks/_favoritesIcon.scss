@@ -3,7 +3,15 @@
     height: 2rem;
     cursor: pointer;
 
-    &.active, &:hover {
+    &.active {
+        path {
+            fill: var(--accent);
+        }
+    }
+}
+
+@media(hover: hover) {
+    .favorites-icon:hover {
         path {
             fill: var(--accent);
         }

@@ -21,6 +21,7 @@ import { useAppDispatch } from '../redux/store';
 import Pagination from '../components/Pagination';
 import { selectPagination } from '../redux/pagination/selectors';
 import { setPageCount } from '../redux/pagination/slice';
+import clsx from 'clsx';
 
 const sortList: Sort[] = [
   { title: 'по цене', property: 'price', isAsc: false },
@@ -41,9 +42,7 @@ const MainPage: FC = () => {
   const [isShowFilter, setIsShowFilter] = useState(false);
   const [filteredItems, setFilteredItems] = useState<Smartphone[]>([]);
   const filterBtnRef = useRef<HTMLButtonElement>(null);
-  const [clazz, setClazz] = useState('');
-  const isMountedNavigate = useRef(false);
-  const isMountedMobileFilter = useRef(false);
+  const isMounted = useRef(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { mainSort } = useSelector(selectFilter);
@@ -70,7 +69,7 @@ const MainPage: FC = () => {
   }, []);
 
   useEffect(() => {
-    if (isMountedNavigate.current) {
+    if (isMounted.current) {
       if (!isEqual(filterValues, prevFiltersRef.current)) {
         let queryString = qs.stringify(filterValues);
 
@@ -83,16 +82,12 @@ const MainPage: FC = () => {
       prevFiltersRef.current = filterValues;
     }
 
-    isMountedNavigate.current = true;
+    isMounted.current = true;
   }, [filterValues]);
 
   useEffect(() => {
-    if (isMountedMobileFilter.current) {
-      setClazz(isShowFilter ? ' shown' : ' hidden');
-    }
-
-    isMountedMobileFilter.current = true;
-  }, [isShowFilter]);
+    window.scrollTo(0, 0);
+  }, [filterValues, currentPage]);
 
   useEffect(() => {
     if (window.location.search) {
@@ -124,7 +119,7 @@ const MainPage: FC = () => {
     prevFiltersRef.current = filterValues;
   }, [filterValues, items, currentPage]);
 
-  const skeletons = [...new Array(10)].map((_, index) => <Skeleton key={index} />);
+  const skeletons = [...new Array(4)].map((_, index) => <Skeleton key={index} />);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -137,7 +132,7 @@ const MainPage: FC = () => {
 
   return (
     <>
-      <div className="smartphones">
+      <div className={clsx("smartphones", isShowFilter && 'no-hover')}>
         <div className="container">
           <div className="smartphones-header">
             <div className="smartphones-header-heading">
@@ -162,8 +157,8 @@ const MainPage: FC = () => {
           <div className="smartphones-content">
             {status === 'error' ? (
               <div className="smartphones-content__error-info">
-                <h2>УПС! Произошла ошибка! 😔</h2>
-                <p>Не удалось загрузить смартфоны</p>
+                <h2>Произошла ошибка! 😕</h2>
+                <p>Не удалось загрузить смартфоны. Попробуйте повторить запрос позже</p>
               </div>
             ) : (
               <div className="smartphones-content-cards">
@@ -175,7 +170,7 @@ const MainPage: FC = () => {
           <Pagination />
         </div>
       </div>
-      <div className={'overlay' + clazz}></div>
+      <div className={clsx('overlay', isShowFilter && 'shown')}></div>
     </>
   );
 };
