@@ -20,7 +20,9 @@ export const cartSlice = createSlice({
       const currentItem = state.items.find((item) => item.id === action.payload.id);
 
       if (currentItem) {
-        currentItem.count++;
+        if (currentItem.count < 999) {
+          currentItem.count++;
+        }
       } else {
         state.items.push({ ...action.payload, count: 1 });
       }

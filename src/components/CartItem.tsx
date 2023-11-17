@@ -1,9 +1,7 @@
 import { FC } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { removeCartItem } from '../redux/cart/slice';
 import CountInput from './CartInput';
-import { selectFavorites } from '../redux/favorites/selectors';
-import { addFavoritesItem, removeFavoritesItem } from '../redux/favorites/slice';
 import FavoritesIcon from './FavoritesIcon';
 import { Link } from 'react-router-dom';
 import { formatPrice } from '../utils/formatPrice';
